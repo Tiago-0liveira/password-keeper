@@ -2,11 +2,17 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import { PrismaClient, Row } from "./generated/client";
 import type { TgetRows, TnewRow, TDeleteRow, TUpdateRow } from "../../src/types"
+import { app } from "electron"
+import path from "path"
+const qePath = path.join(
+	app.getAppPath().replace("app.asar", "app.asar.unpacked"),
+	"dist/query-engine-windows.exe"
+)
 
 const prisma = new PrismaClient(process.env.NODE_ENV === "production" ? {
 	__internal: {
 		engine: {
-			binaryPath: "../app.asar.unpacked/dist/"
+			binaryPath: qePath
 		}
 	}
 } : {})
