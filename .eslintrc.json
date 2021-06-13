@@ -1,43 +1,50 @@
 {
-  "env": {
-    "browser": true,
-    "es2020": true,
-    "node": true,
-    "jest": true
-  },
-  "extends": [
-    "standard",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint"
-  ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 11,
-    "sourceType": "module"
-  },
-  "plugins": [
-    "react",
-    "prettier",
-    "@typescript-eslint"
-  ],
-  "rules": {
-    "react/prop-types": "off",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "ts": "never",
-        "tsx": "never"
-      }
-    ]
-  },
-  "settings": {
-    "import/resolver": {
-      "typescript": {} 
-    }
+	"env": {
+	  "browser": true,
+	  "es2020": true,
+	  "node": true,
+	  "jest": true
+	},
+	"extends": [
+	  "standard",
+	  "plugin:react/recommended",
+	  "plugin:@typescript-eslint/recommended",
+	  "prettier/@typescript-eslint",
+	  "prettier"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+	  "ecmaFeatures": {
+		"jsx": true
+	  },
+	  "ecmaVersion": 11,
+	  "sourceType": "module"
+	},
+	"plugins": [
+	  "react",
+	  "prettier",
+	  "@typescript-eslint"
+	],
+	"rules": {
+	  "react/prop-types": "off",
+	  "import/extensions": [
+		"error",
+		"ignorePackages",
+		{
+		  "ts": "never",
+		  "tsx": "never"
+		}
+	  ],
+	  "indent": ["error", 4],
+	  "no-tabs": ["error", false],
+	  "linebreak-style": ["error", "crlf"],
+	  "quotes": ["error", "double"],
+	  "semi": ["error", "never"]
+	},
+	"settings": {
+	  "import/resolver": {
+		"typescript": {} 
+	  }
+	}
   }
-}
+  

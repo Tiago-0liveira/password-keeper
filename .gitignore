@@ -1,3 +1,8 @@
 node_modules
 dist
 packages
+yarn-error.log
+prisma/migrations
+prisma/*.db*
+electron/database/generated
+electron/data.json

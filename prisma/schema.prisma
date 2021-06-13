@@ -1,0 +1,19 @@
+datasource db {
+  	provider = "sqlite"
+  	url      = "file:./data.db"
+}
+
+generator client {
+ 	provider = "prisma-client-js"
+	binaryTargets = ["native"]
+	output   = "../electron/database/generated/client"
+}
+
+model Row {
+	uuid              String         @id @default(uuid())
+	createdAt         DateTime       @default(now())
+	site              String
+	username          String?
+	email             String
+	password          String
+}
