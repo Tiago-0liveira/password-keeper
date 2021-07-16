@@ -3,8 +3,7 @@ import "regenerator-runtime/runtime";
 import { app, BrowserWindow, ipcMain } from "electron"
 import * as path from "path"
 import * as url from "url"
-import { Row } from "./database/generated/client"
-import data from "./data.json"
+
 import {
 	getRows,
 	newRow,
