@@ -3,7 +3,7 @@ import "regenerator-runtime/runtime";
 import { app, BrowserWindow, ipcMain } from "electron"
 import * as path from "path"
 import * as url from "url"
-import type { Row } from "./database/generated/client"
+import { Row } from "./database/generated/client"
 import data from "./data.json"
 import {
 	getRows,
@@ -66,9 +66,9 @@ app.on("ready", createWindow)
 app.allowRendererProcessReuse = true
 
 ipcMain.on("requestGetRows", async (event) => {
-	console.log("ipcMain||getRows")
 	const res = await getRows()
 	if (res.error) { console.error(res.error) }
+	console.log(`ipcMain||getRows||${(res.data as Row[]).length} rows`)
 	event.reply("responseGetRows", res)
 })
 ipcMain.on("newRow", async (event, data: NewRowData) => {

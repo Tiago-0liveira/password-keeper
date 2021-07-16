@@ -2,6 +2,7 @@ node_modules
 dist
 packages
 yarn-error.log
+yarn.lock
 prisma/migrations
 prisma/*.db*
 electron/database/generated

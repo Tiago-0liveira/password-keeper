@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react"
 import { ipcRenderer, remote } from "electron"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faBars, faMinus, faSquare, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRight, faBars, faMinus, faSquare as fasSquare, faTimes, faWindowMaximize, faWindowRestore } from "@fortawesome/free-solid-svg-icons"
 import type { App } from "../../types"
 import PasswordApp from "../Apps/Passwords"
+import { faSquare as farSquare } from "@fortawesome/free-regular-svg-icons"
 import Apps from "../Apps"
-import "./styles.scss"
 import { Row } from "../../../electron/database/generated/client"
+import "./styles.scss"
+import clsx from "clsx"
+
 
 const { BrowserWindow } = remote;
 
 const Main: React.FC = () => {
-	const [data, setdata] = useState<Row[]>()
 	const [activeApp, setActiveApp] = useState<App>(PasswordApp)
 	const [isSbopen, setisSbopen] = useState(true)
+	const [isMaximized, setisMaximized] = useState<boolean>(BrowserWindow.getFocusedWindow()?.isMaximized() ?? false)
 
 	const toggleSideBar = () => { setisSbopen(value => !value) }
 	const setApp = (index: number) => () => {
@@ -26,6 +29,7 @@ const Main: React.FC = () => {
 	const toggleMaximize = () => {
 		const win = BrowserWindow.getFocusedWindow()
 		win && (win.isMaximized() ? win.unmaximize() : win.maximize())
+		setisMaximized(win?.isMaximized ?? false)
 	}
 	const exit = () => {
 		const win = BrowserWindow.getFocusedWindow()?.close()
@@ -44,7 +48,12 @@ const Main: React.FC = () => {
 						<FontAwesomeIcon icon={faMinus} size="2x" />
 					</div>
 					<div className="maximize" onClick={toggleMaximize}>
-						<FontAwesomeIcon icon={faSquare} size="2x" />
+						{isMaximized ? <div className="squares">
+							<FontAwesomeIcon className="first" icon={farSquare} size="2x" />
+							<FontAwesomeIcon className="invisible" icon={fasSquare} size="2x" />
+							<FontAwesomeIcon className="second" icon={farSquare} size="2x" swapOpacity />
+						</div> :
+							<FontAwesomeIcon icon={faWindowMaximize} size="2x" />}
 					</div>
 					<div className="exit" onClick={exit}>
 						<FontAwesomeIcon icon={faTimes} size="2x" />
@@ -52,15 +61,15 @@ const Main: React.FC = () => {
 				</div>
 			</div>
 			<div className="content">
-				{isSbopen && <div className="sidebar">
+				<div className={clsx("sidebar", !isSbopen && "closed")}>
 					{Apps.map((app, i) => (
-						<div className={["app", app.label === activeApp.label ? "active" : ""].join(" ")} key={Math.random().toFixed(3)} onClick={setApp(i)}>
+						<div className={clsx("app", app.label === activeApp.label ? "active" : "")} key={i} onClick={setApp(i)}>
 							<p><b>{app.label}</b></p>
-							<FontAwesomeIcon icon={faArrowRight} size="2x" />
+							<FontAwesomeIcon icon={faArrowRight} size="1x" />
 						</div>
 					))}
-				</div>}
-				<div className={["active-app", isSbopen ? "SbOpen" : "SbClosed"].join(" ")}>
+				</div>
+				<div className={clsx("active-app", isSbopen ? "SbOpen" : "SbClosed")}>
 					{<activeApp.component />}
 				</div>
 			</div>

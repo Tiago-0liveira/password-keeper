@@ -12,18 +12,17 @@ body {
 	color: #e1e1e6;
 	width: 100vw;
 	height: 100vh;
-	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow: hidden;
 }
 .main {
 	width: 100vw;
 	height: 100vh;
 	.navbar {
-		position: fixed;
+		position: sticky;
 		display: flex;
+		top:0;
 		align-items: center;
 		justify-content: space-between;
-		top:0;
 		z-index:2;
 		width: 100%;
 		height: $nav-height;
@@ -69,12 +68,36 @@ body {
 			justify-content: flex-end;
 			align-items: center;
 			div {
+				position: relative;
 				-webkit-app-region: no-drag;
 				&:hover {
 					&.minimize { svg{ color: yellow; } }
 					&.maximize { svg{ color: #004ec2; } }
 					&.exit { svg{ color: $red; } }
 					background-color: $nav-bar-onhover-item-color;
+				}
+			}
+			div.maximize {
+				.squares {
+					position: relative;
+					svg:not(.invisible) {
+						transform: scale(0.7);
+					}
+					.invisible {
+						visibility: hidden;
+					}
+					.first {
+						position: absolute;
+						bottom: 6%;
+						left: 6%;
+					}
+					.second {
+						position: absolute;
+						top: 6%;
+						right: 6%;
+						z-index: 2;
+						background-color: $nav-bar-color;
+					}
 				}
 			}
 			svg {
@@ -86,20 +109,21 @@ body {
 		}
 	}
 	.content {
-		margin:auto;
-		position: absolute;
-		top: $nav-height;
+		position: relative;
 		width: 100%;
 		height: calc(100vh - #{$nav-height});
 		
 		.sidebar {
 			height: calc(100vh - #{$nav-height});
 			width: 15%;
-			min-width: 15%;
 			background-color: $side-bar-color;
 			float:left;
-			position: fixed;
+			position: sticky;
 			bottom: 0;
+			transition: 0.3s;
+			&.closed {
+				transform: translateX(-300px);
+			}
 			.app {
 				width: 100%;
 				height: 50px;
@@ -129,14 +153,16 @@ body {
 			}
 		}
 		.active-app {
-			&.SbClosed { width:100%; }
+			transition: 0.3s;
+			&.SbClosed { 
+				min-width:100%;
+				width:100%;
+			}
 			&.SbOpen { 
 				width: 85%;
 				min-width: 85%;
 				margin-left: 15%;
 			}
-			
-			background-color: $active-app-bg-color;
 		}
 	}
 }

@@ -69,6 +69,7 @@
 		"@fortawesome/free-regular-svg-icons": "^5.15.3",
 		"@fortawesome/free-solid-svg-icons": "^5.15.3",
 		"@fortawesome/react-fontawesome": "^0.1.14",
+		"clsx": "^1.1.1",
 		"core-js": "^3.14.0",
 		"css-loader": "^5.2.6",
 		"node-sass": "^6.0.0",

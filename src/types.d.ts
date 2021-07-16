@@ -12,7 +12,7 @@ export type NewRowData = {
 	site: string,
 	email: string,
 	password: string,
-	username?: string,
+	username: string | null,
 }
 export type PossibleData = null | Data
 export type DataOrError = { data: Data, error: null } | { data: null, error: Error }
