@@ -4,7 +4,10 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
+
+$sidebar-size: 200px;
 
 body {
 	font-family: Arial, Helvetica, sans-serif;
@@ -15,7 +18,7 @@ body {
 	overflow: hidden;
 }
 .main {
-	width: 100vw;
+	width: 100vw;	
 	height: 100vh;
 	.navbar {
 		position: sticky;
@@ -47,6 +50,7 @@ body {
 				align-items: center;
 				justify-content: space-between;
 				span {
+					transition: 0.3s;
 					padding: 0 5px;
 					user-select: none;
 					b {
@@ -115,14 +119,15 @@ body {
 		
 		.sidebar {
 			height: calc(100vh - #{$nav-height});
-			width: 15%;
+			width: $sidebar-size;
 			background-color: $side-bar-color;
 			float:left;
 			position: sticky;
 			bottom: 0;
 			transition: 0.3s;
 			&.closed {
-				transform: translateX(-300px);
+				transform: translateX(-$sidebar-size);
+				/*display: none;*/
 			}
 			.app {
 				width: 100%;
@@ -153,15 +158,13 @@ body {
 			}
 		}
 		.active-app {
+			position: absolute;
+			height: calc(100vh - #{$nav-height});
+			width: calc(100% - #{$sidebar-size});
 			transition: 0.3s;
+			right: 0;
 			&.SbClosed { 
-				min-width:100%;
 				width:100%;
-			}
-			&.SbOpen { 
-				width: 85%;
-				min-width: 85%;
-				margin-left: 15%;
 			}
 		}
 	}

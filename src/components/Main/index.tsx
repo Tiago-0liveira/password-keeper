@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { ipcRenderer, remote } from "electron"
+import { remote } from "electron"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faBars, faMinus, faSquare as fasSquare, faTimes, faWindowMaximize, faWindowRestore } from "@fortawesome/free-solid-svg-icons"
-import type { App } from "../../types"
+import { faArrowRight, faBars, faMinus, faSquare as fasSquare, faTimes, faWindowMaximize } from "@fortawesome/free-solid-svg-icons"
 import PasswordApp from "../Apps/Passwords"
 import { faSquare as farSquare } from "@fortawesome/free-regular-svg-icons"
 import Apps from "../Apps"
-import { Row } from "../../../electron/database/generated/client"
 import "./styles.scss"
 import clsx from "clsx"
 
@@ -14,7 +12,7 @@ import clsx from "clsx"
 const { BrowserWindow } = remote;
 
 const Main: React.FC = () => {
-	const [activeApp, setActiveApp] = useState<App>(PasswordApp)
+	const [activeApp, setActiveApp] = useState(PasswordApp)
 	const [isSbopen, setisSbopen] = useState(true)
 	const [isMaximized, setisMaximized] = useState<boolean>(BrowserWindow.getFocusedWindow()?.isMaximized() ?? false)
 
@@ -34,6 +32,14 @@ const Main: React.FC = () => {
 	const exit = () => {
 		const win = BrowserWindow.getFocusedWindow()?.close()
 	}
+	const handleCtrlB = toggleSideBar
+	useEffect(() => {
+		remote.globalShortcut.register("Ctrl+B", handleCtrlB)
+		return () => {
+			remote.globalShortcut.unregister("Ctrl+B")
+		}
+	})
+
 	return (
 		<div className="main">
 			<div className="navbar">
@@ -69,8 +75,8 @@ const Main: React.FC = () => {
 						</div>
 					))}
 				</div>
-				<div className={clsx("active-app", isSbopen ? "SbOpen" : "SbClosed")}>
-					{<activeApp.component />}
+				<div className={clsx("active-app", !isSbopen && "SbClosed")} key={activeApp.label}>
+					{activeApp.component}
 				</div>
 			</div>
 		</div>

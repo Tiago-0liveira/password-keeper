@@ -1,5 +1,5 @@
 {
-	"name": "electron-react-typescript",
+	"name": "PasswordKeeper-v2.0",
 	"version": "1.0.0",
 	"description": "An Electron boilerplate including TypeScript, React and ESLint.",
 	"main": "./dist/main.js",
@@ -14,7 +14,7 @@
 		"build:electron": "webpack --mode=production --config webpack/electron.webpack.js",
 		"build:react": "webpack --mode=production --config webpack/react.webpack.js",
 		"package": "npm-run-all build package:dist",
-		"package:dist": "electron-builder --dir",
+		"package:dist": "electron-builder --x64",
 		"package:dist:exe": "npm-run-all package:dist exe",
 		"package:exe": "npm-run-all package exe",
 		"copyPrismaSchema--not-in-use": "if not exist dist mkdir dist && robocopy prisma dist schema.prisma /NS /NC /NFL /NDL /NJH /NJS",
@@ -77,20 +77,29 @@
 		"react-dom": "^16.13.1",
 		"regenerator-runtime": "^0.13.7",
 		"sass-loader": "10",
-		"style-loader": "^2.0.0"
+		"sqlite3": "^5.0.2",
+		"style-loader": "^2.0.0",
+		"uuid": "^8.3.2"
 	},
 	"build": {
-		"appId": "Tiago0liveira.PasswordKeeper",
-		"directories": {
-			"output": "packages"
-		},
+		"appId": "Tiago0liveira.PasswordKeeper-v2.0",
 		"files": [
-			"package.json",
-			"dist/**"
+			"dist/**/*"
 		],
-		"asarUnpack": [
-			"dist/query-engine-windows.exe"
-		]
+		"win": {
+			"target": [
+				"nsis"
+			],
+			"icon": "build/icon.ico"
+		},
+		"nsis": {
+			"installerIcon": "build/icon.ico",
+			"uninstallerIcon": "build/icon.ico",
+			"uninstallDisplayName": "Uninstaller PasswordKeeper v2.0",
+			"license": "license.txt",
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true
+		}
 	},
 	"config": {
 		"commitizen": {

@@ -4,26 +4,21 @@ import { app, BrowserWindow, ipcMain } from "electron"
 import * as path from "path"
 import * as url from "url"
 
-import {
-	getRows,
-	newRow,
-	deleteRow,
-	updateRow
-} from "./database/database"
-import { NewRowData } from "../src/types"
+import { NewRowData, Row } from "../src/types"
+import { getRows, deleteRow, newRow, updateRow } from "./database/database";
 
 let mainWindow: Electron.BrowserWindow | null
 
 function createWindow() {
 	mainWindow = new BrowserWindow({
-		width: 1100,
-		height: 700,
+		width: 1000,
+		height: 650,
 		backgroundColor: "#191622",
 		center: true,
 		frame: false,
 		title: "Password Keeper",
-		minWidth: 500,
-		minHeight: 500,
+		minWidth: 800,
+		minHeight: 600,
 		webPreferences: {
 			nodeIntegration: true,
 			enableRemoteModule: true
@@ -55,9 +50,6 @@ app.on("ready", createWindow)
 				module.default(module.REACT_DEVELOPER_TOOLS)
 					.then((name) => console.log(`Added Extension:  ${name}`))
 					.catch((err) => console.log("An error occurred: ", err))
-				module.default(module.REDUX_DEVTOOLS)
-					.then((name) => console.log(`Added Extension:  ${name}`))
-					.catch((err) => console.log("An error occurred: ", err))
 			}).catch(console.error)
 		}
 
@@ -65,35 +57,21 @@ app.on("ready", createWindow)
 app.allowRendererProcessReuse = true
 
 ipcMain.on("requestGetRows", async (event) => {
-	const res = await getRows()
-	if (res.error) { console.error(res.error) }
-	console.log(`ipcMain||getRows||${(res.data as Row[]).length} rows`)
-	event.reply("responseGetRows", res)
+	const rows: Row[] = await getRows()
+	console.log(`ipcMain||getRows||${rows.length} rows`)
+	event.reply("responseGetRows", rows)
 })
-ipcMain.on("newRow", async (event, data: NewRowData) => {
-	console.log(`ipcMain||newRow||${data}`)
-	const res = await newRow(data)
-	if (res.error) {
-		event.reply("error", res.error)
-		console.error(res.error)
-	}
-	else {
-		event.reply("newRow", res)
-		console.log(`new row successfully created|${(res.data as Row).site}|${(res.data as Row).email}|${(res.data as Row).uuid}`)
-	}
+ipcMain.on("requestNewRow", async (event, data: NewRowData) => {
+	console.log(`ipcMain||newRow||${JSON.stringify(data, null, 0)}`)
+	newRow(data).then(async () => {
+		event.reply("responseGetRows", await getRows())
+	});
 })
-ipcMain.on("deleteRow", async (event, data: { uuid: string }) => {
-	console.log(`ipcMain||deleteRow||${data}`)
-	event.reply("deleteRow", await deleteRow({ uuid: data.uuid }))
+ipcMain.on("requestDeleteRow", async (event, data: { uuid: number }) => {
+	console.log(`ipcMain||deleteRow||${JSON.stringify(data, null, 0)}`)
+	event.reply("responseDeleteRow", await deleteRow({ uuid: data.uuid }))
 })
-ipcMain.on("updateRow", async (event, data: { uuid: string, newRowData: NewRowData }) => {
-	console.log(`ipcMain||updateRow||${data}`)
-	const res = await updateRow({ uuid: data.uuid, newRowData: data.newRowData })
-	if (res.error) {
-		console.error(res.error)
-		event.reply("error", res.error)
-	} else {
-		event.reply("updateRow", res)
-		console.log("updated row with success")
-	}
+ipcMain.on("requestUpdateRow", async (event, data: { uuid: number, newRowData: NewRowData }) => {
+	console.log(`ipcMain||updateRow||${JSON.stringify(data)}`)
+	event.reply("responseUpdateRow", await updateRow({ uuid: data.uuid, newRowData: data.newRowData }))
 })

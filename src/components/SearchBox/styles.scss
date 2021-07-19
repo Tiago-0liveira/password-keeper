@@ -1,0 +1,53 @@
+@import "../../vars";
+
+.SearchBoxWrapper {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(20, 20, 20, 0.452);
+	opacity: 0;
+	z-index:-1;
+	transition: 0.3s;
+	display: flex;
+	justify-content: center;
+	left: 0;
+	top: 0;
+	&.active {
+		z-index: 1;
+		opacity: 1;
+		.SearchBox {
+			top: 15%;
+		}
+	}
+	.SearchBox {
+		transition: 0.2s;
+		position: absolute;
+		top: -100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		
+		input {
+			font-size: 18px;
+			border:none;
+			border-radius: 5px 0 0 5px;
+			padding: 6px;
+			&:focus {
+				outline:none;
+			}
+		}
+		span {
+			font-size: 18px;
+			padding: 6px;
+			border-left: 2px solid black;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border-radius:0 5px 5px 0;
+			background-color: #525252;
+			&:hover {
+				background-color: #616161;
+			}
+		}
+	}
+}

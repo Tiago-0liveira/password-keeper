@@ -4,7 +4,8 @@ import "./styles.scss"
 const SettingsComponent: React.FC = () => {
 	return (
 		<div className="SettingsComponent">
-			Settings Comp
+			Settings
+			<b>WIP</b>
 		</div>
 	)
 }
@@ -12,5 +13,5 @@ const SettingsComponent: React.FC = () => {
 
 export default {
 	label: "Settings",
-	component: SettingsComponent
+	component: <SettingsComponent />
 }
