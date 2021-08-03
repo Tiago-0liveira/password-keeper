@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import "./styles.scss"
 import type { Row } from "../../types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClipboardList, faEdit, faEye, faEyeSlash, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { faClipboardList, faEye, faEyeSlash, faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons"
 
 export interface RowProps {
 	row: Row
@@ -27,7 +27,7 @@ const RowComponent: React.FC<RowProps> = (props) => {
 				<span className="value">{isPassHidden ? "*".repeat(12) : props.row.password}<FontAwesomeIcon icon={faClipboardList} onClick={() => navigator.clipboard.writeText(props.row.password)} size="lg" /><FontAwesomeIcon icon={isPassHidden ? faEyeSlash : faEye} onClick={() => setIsPassHidden(b => !b)} /></span>
 			</div>
 			<div className="buttons">
-				<button className="update" onClick={props.handleUpdate(props.row)}><FontAwesomeIcon icon={faEdit} size="lg" /></button>
+				<button className="update" onClick={props.handleUpdate(props.row)}><FontAwesomeIcon icon={faPencilAlt} size="lg" /></button>
 				<button className="delete" onClick={props.handleDelete(props.row)}><FontAwesomeIcon icon={faTimes} size="lg" /></button>
 			</div>
 		</div>
