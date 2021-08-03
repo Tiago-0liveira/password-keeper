@@ -8,7 +8,7 @@ import { NewRowData, Row } from "../src/types"
 import { getRows, deleteRow, newRow, updateRow } from "./database/database";
 
 let mainWindow: Electron.BrowserWindow | null
-
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true"
 function createWindow() {
 	mainWindow = new BrowserWindow({
 		width: 1000,
