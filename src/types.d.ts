@@ -11,6 +11,7 @@ export type Row = {
 export type App = {
 	label: string
 	component: React.FC<PasswordsComponentProps>
+	extraLabel: boolean
 }
 export type Data = Row[] | Row
 export type Error = { error: string }

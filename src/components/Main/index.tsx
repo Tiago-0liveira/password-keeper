@@ -15,6 +15,7 @@ const Main: React.FC = () => {
 	const [activeApp, setActiveApp] = useState(PasswordApp)
 	const [isSbopen, setisSbopen] = useState(true)
 	const [isMaximized, setisMaximized] = useState<boolean>(BrowserWindow.getFocusedWindow()?.isMaximized() ?? false)
+	const [extraLabel, setExtraLabel] = useState("")
 
 	const toggleSideBar = () => { setisSbopen(value => !value) }
 	const setApp = (index: number) => () => {
@@ -30,7 +31,7 @@ const Main: React.FC = () => {
 		setisMaximized(win?.isMaximized ?? false)
 	}
 	const exit = () => {
-		const win = BrowserWindow.getFocusedWindow()?.close()
+		BrowserWindow.getFocusedWindow()?.close()
 	}
 	const handleCtrlB = toggleSideBar
 	useEffect(() => {
@@ -47,7 +48,15 @@ const Main: React.FC = () => {
 					<div className="toggleSideBar-button" onClick={toggleSideBar}>
 						<FontAwesomeIcon icon={faBars} size="lg" />
 					</div>
-					<h3><span>PasswordKeeper</span><span className="divider"><b>/</b></span><span>{activeApp.label}</span></h3>
+					<h3>
+						<span>PasswordKeeper</span>
+						<span className="divider"><b>/</b></span>
+						<span>{activeApp.label}</span>
+						{activeApp.extraLabel && <>
+							<span className="divider"><b>/</b></span>
+							{extraLabel && <span>{extraLabel}</span>}
+						</>}
+					</h3>
 				</div>
 				<div className="rigth">
 					<div className="minimize" onClick={minimize}>
@@ -76,7 +85,7 @@ const Main: React.FC = () => {
 					))}
 				</div>
 				<div className={clsx("active-app", !isSbopen && "SbClosed")} key={activeApp.label}>
-					{activeApp.component}
+					{<activeApp.component setExtraLabel={setExtraLabel} />}
 				</div>
 			</div>
 		</div>

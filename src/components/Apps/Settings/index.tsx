@@ -13,5 +13,6 @@ const SettingsComponent: React.FC = () => {
 
 export default {
 	label: "Settings",
-	component: <SettingsComponent />
+	component: SettingsComponent,
+	extraLabel: false
 }
