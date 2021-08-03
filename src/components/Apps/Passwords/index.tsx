@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons"
+import { faPlus, faSearch, faTimes } from "@fortawesome/free-solid-svg-icons"
 import "./styles.scss"
 import { ipcRenderer, remote } from "electron"
 import type { Row } from "../../../types"
 import Modal from "../../Modal"
 import RowComponent from "../../Row"
 import SearchBox from "../../SearchBox"
-
+import CardComponent from "../../Card"
 export type PasswordsComponentProps = {
-
+	setExtraLabel: React.Dispatch<React.SetStateAction<string>>
 }
 
-const PasswordsComponent: React.FC<PasswordsComponentProps> = (_props) => {
+const PasswordsComponent: React.FC<PasswordsComponentProps> = (props) => {
 	const [data, setData] = useState<Row[]>([])
 	const [isModalActive, setIsModalActive] = useState(false)
 	const [updateModalData, setUpdateModalData] = useState<Row>()
 	const [isModalUpdateData, setIsModalUpdateData] = useState(false)
 	const [isSearchBoxOpen, setSearchBoxOpen] = useState(false)
 	const [filter, setFilter] = useState("")
+	const [switchValue, setSwitchValue] = useState(false)
+
+	useEffect(() => {
+		props.setExtraLabel(!switchValue ? "Row" : "Card")
+	}, [switchValue]);
 
 	const responseGetRowsListener = (_event: Electron.IpcRendererEvent, data: Row[]) => {
 		setData(data)
@@ -35,6 +40,7 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = (_props) => {
 
 	const handleNewRow = () => { setIsModalActive(true) }
 	const handleSearchButton = () => { setSearchBoxOpen(true) }
+	const handleClearSearchFilterButton = () => { setFilter("") }
 	const toggleSearch = () => { setSearchBoxOpen(b => !b) }
 	const handleUpdate = (row: Row) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault()
@@ -69,35 +75,65 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = (_props) => {
 
 	return (
 		<div className="PasswordsComponent">
-			<div className="Rows-header">
-				<div><span>Site</span></div>
-				<div><span>Email</span></div>
-				<div><span>Username</span></div>
-				<div><span>Password</span></div>
-			</div>
-			<div className="rows">
-				{data.sort((a, b) =>
-					a.site.localeCompare(b.site) ||
-					a.email.localeCompare(b.email) ||
-					a.username.localeCompare(b.username)).filter(row =>
-						row.site.toLowerCase().includes(filter) ||
-						row.email.toLowerCase().includes(filter) ||
-						row.username?.toLowerCase().includes(filter)).map(row => (
-							<RowComponent
-								key={`${row.uuid}${Math.random().toFixed(4)}`}
-								row={row}
-								handleUpdate={handleUpdate}
-								handleDelete={handleDelete}
-							/>
-						))
-				}
-			</div>
+			<label className="switch" >
+				<input type="checkbox" onClick={(e) => setSwitchValue(b => !b)} />
+				<span className="slider round" >
+					<span className={!switchValue ? "r" : "c"}>{!switchValue ? "Row" : "Card"}</span>
+				</span>
+			</label>
+			{!switchValue ?
+				<>
+					<div className="Rows-header">
+						<div><span>Site</span></div>
+						<div><span>Email</span></div>
+						<div><span>Username</span></div>
+						<div><span>Password</span></div>
+					</div><div className="Rows">
+						{data.sort((a, b) => a.site.localeCompare(b.site) ||
+							a.email.localeCompare(b.email) ||
+							a.username.localeCompare(b.username)).filter(row => row.site.toLowerCase().includes(filter) ||
+								row.email.toLowerCase().includes(filter) ||
+								row.username?.toLowerCase().includes(filter)).map(row => <RowComponent
+									key={`${row.uuid}${Math.random().toFixed(4)}`}
+									row={row}
+									handleUpdate={handleUpdate}
+									handleDelete={handleDelete} />
+								)}
+					</div></> :
+				<>
+					<div className="Cards-header">
+						<div><span>Site</span></div>
+						<div><span>Email</span></div>
+						<div><span>Username</span></div>
+						<div><span>Password</span></div>
+					</div>
+					<div className="Cards">
+						{data.sort((a, b) =>
+							a.site.localeCompare(b.site) ||
+							a.email.localeCompare(b.email) ||
+							a.username.localeCompare(b.username)).filter(row =>
+								row.site.toLowerCase().includes(filter) ||
+								row.email.toLowerCase().includes(filter) ||
+								row.username?.toLowerCase().includes(filter)).map(row => (
+									<CardComponent
+										key={`${row.uuid}${Math.random().toFixed(4)}`}
+										row={row}
+										handleUpdate={handleUpdate}
+										handleDelete={handleDelete} />
+								))
+						}
+					</div>
+				</>}
 			<div className="newButton" onClick={handleNewRow}>
 				<FontAwesomeIcon icon={faPlus} size="lg" />
 			</div>
 			<div className="searchButton" onClick={handleSearchButton}>
 				<FontAwesomeIcon icon={faSearch} size="lg" />
 			</div>
+			{filter.length > 0 &&
+				<div className="clearSearchFilterButton" onClick={handleClearSearchFilterButton}>
+					<FontAwesomeIcon icon={faTimes} size="lg" />
+				</div>}
 			<Modal active={isModalActive} setActive={setIsModalActive} update={isModalUpdateData} updateData={updateModalData} setUpdate={setIsModalUpdateData} setUpdateData={setUpdateModalData} />
 			{isSearchBoxOpen && <SearchBox isOpen={isSearchBoxOpen} setFilter={setFilter} setIsOpen={setSearchBoxOpen} filter={filter} />}
 		</div>
@@ -107,5 +143,6 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = (_props) => {
 
 export default {
 	label: "Password Vault",
-	component: <PasswordsComponent />
+	component: PasswordsComponent,
+	extraLabel: true
 }
