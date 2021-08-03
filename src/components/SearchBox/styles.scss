@@ -50,4 +50,15 @@
 			}
 		}
 	}
+	> div.CloseIcon {
+		position: absolute;
+		top: 30px;
+		background-color: #525252;
+		color: $red;
+		padding: 2px 4px 2px 4px;
+		border-radius: 5px;
+		&:hover {
+			background-color: lighten($color: #525252, $amount: 5%);
+		}
+	}
 }

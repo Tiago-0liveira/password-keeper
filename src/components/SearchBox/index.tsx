@@ -1,4 +1,4 @@
-import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import clsx from "clsx"
 import { remote } from "electron"
@@ -21,11 +21,23 @@ const SearchBox: React.FC<SearchBoxProps> = (props) => {
 			remote.globalShortcut.unregister("Escape")
 		};
 	}, []);
+
+	const handleResetFilter = () => { props.setFilter("") }
+	const handleClose = () => { props.setIsOpen(false) }
+	const handleOutSideClick = (e: any) => {
+		e.persist()
+		console.log(e._targetInst.pendingProps.className);
+		e._targetInst.pendingProps.className?.includes("SearchBoxWrapper") && handleClose()
+	}
+
 	return (
-		<div className={clsx("SearchBoxWrapper", { active: props.isOpen })}>
+		<div className={clsx("SearchBoxWrapper", { active: props.isOpen })} onClick={handleOutSideClick}>
 			<div className="SearchBox">
 				<input type="text" autoFocus value={props.filter} placeholder="Filter" onChange={(e) => props.setFilter(e.target.value)} />
-				<span><FontAwesomeIcon onClick={() => { props.setIsOpen(false) }} icon={faTimes} className="TimesIcon" size="lg" /></span>
+				<span><FontAwesomeIcon icon={faTimes} onClick={handleResetFilter} className="TimesIcon" size="lg" /></span>
+			</div>
+			<div className="CloseIcon" onClick={handleClose}>
+				<FontAwesomeIcon icon={faTimes} size="lg" />
 			</div>
 		</div>
 	)

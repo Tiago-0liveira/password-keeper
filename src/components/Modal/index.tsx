@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import "./styles.scss"
 import clsx from "clsx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEnvelope, faGlobe, faLock, faEye, faEyeSlash, faUser, faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { faEnvelope, faGlobe, faLock, faEye, faEyeSlash, faUser, faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import { Row } from "../../types"
 import { ipcRenderer, remote } from "electron"
 
@@ -94,8 +94,13 @@ const Modal: React.FC<ModalProps> = (props) => {
 		props.setUpdate(false)
 		props.setUpdateData(undefined)
 	}
+	const handleOutSideClick = (e: any) => {
+		e.persist()
+		console.log(e._targetInst.pendingProps.className);
+		e._targetInst.pendingProps.className?.includes("Modal") && handleCancel(e)
+	}
 	return (
-		<div className={clsx("ModalWrapper", { active: props.active })}>
+		<div className={clsx("ModalWrapper", { active: props.active })} onClick={handleOutSideClick}>
 			<div className="Modal">
 				<form onSubmit={handleOnSubmit}>
 					<div className="top">
