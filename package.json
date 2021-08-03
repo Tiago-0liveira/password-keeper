@@ -1,6 +1,6 @@
 {
-	"name": "PasswordKeeper-v2.0",
-	"version": "1.0.0",
+	"name": "PasswordKeeper",
+	"version": "2.1.0",
 	"description": "An Electron boilerplate including TypeScript, React and ESLint.",
 	"main": "./dist/main.js",
 	"scripts": {
@@ -20,6 +20,26 @@
 		"copyPrismaSchema--not-in-use": "if not exist dist mkdir dist && robocopy prisma dist schema.prisma /NS /NC /NFL /NDL /NJH /NJS",
 		"exe": "\"packages/win-unpacked/electron-react-typescript.exe\"",
 		"format": "prettier-eslint --write \"{,!(node_modules,dist)/**/}*.{js,jsx}\""
+	},
+	"build": {
+		"appId": "Tiago0liveira.PasswordKeeper",
+		"files": [
+			"dist/**/*"
+		],
+		"win": {
+			"target": [
+				"nsis"
+			],
+			"icon": "build/icon.ico"
+		},
+		"nsis": {
+			"installerIcon": "build/icon.ico",
+			"uninstallerIcon": "build/icon.ico",
+			"uninstallDisplayName": "Uninstaller PasswordKeeper",
+			"license": "license.txt",
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true
+		}
 	},
 	"keywords": [],
 	"author": "Tiago Oliveira <tfgoliveira@gmail.com>",
@@ -80,26 +100,6 @@
 		"sqlite3": "^5.0.2",
 		"style-loader": "^2.0.0",
 		"uuid": "^8.3.2"
-	},
-	"build": {
-		"appId": "Tiago0liveira.PasswordKeeper-v2.0",
-		"files": [
-			"dist/**/*"
-		],
-		"win": {
-			"target": [
-				"nsis"
-			],
-			"icon": "build/icon.ico"
-		},
-		"nsis": {
-			"installerIcon": "build/icon.ico",
-			"uninstallerIcon": "build/icon.ico",
-			"uninstallDisplayName": "Uninstaller PasswordKeeper v2.0",
-			"license": "license.txt",
-			"oneClick": false,
-			"allowToChangeInstallationDirectory": true
-		}
 	},
 	"config": {
 		"commitizen": {
