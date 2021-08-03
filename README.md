@@ -1,47 +1,28 @@
-## Electron + TypeScript + React
-Boilerplate for a project using Electron, React and Typescript
+# Password-Keeper
+## | Pros:
 
-## Installation
+	- Store your loggin credentials 
+	- No need to remember all the different and complex passwords
+	- Do not care if the password is random just store it! 
 
-Use a package manager of your choice (npm, yarn, etc.) in order to install all dependencies
+## | Build it yourself!
 
-```bash
-npm install
-```
+I Recommend using `yarn` wich is the package manager i used. 
 
-```bash
-yarn install
-```
+To create a new build just run `yarn package:dist`
 
-## Usage
-In order to run this project 2 scripts will need to be executed `dev:react` and `dev:electron`, run each one in a different terminal and always run `dev:react` before `dev:electron`, or `dev` to run them in order automatically
+## | Debugging/Developing
 
-```bash
-npm run dev:react
-```
-```bash
-npm run dev:electron
-```
-
-or
-
-```bash
-npm run dev
-```
-
-## Packaging
-To generate a project package run `package`
-
-```bash
-npm run package
-```
+While developing the app run `yarn dev:electron` in one terminal and in another one `yarn dev:react`
+Everytime a change is made in the electron part you have to restart the electron terminal. In the other hand react will detect changes automatically and auto-update!
 
 
 
-## Contributing
+## | Contributing
 
 Pull requests are always welcome 😃.
 
-## License
+### 
 
-[MIT](https://choosealicense.com/licenses/mit/)
+## Authors :
+- [Tiago-0liveira](https://github.com/Tiago-0liveira)
