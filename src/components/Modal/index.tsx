@@ -3,8 +3,9 @@ import "./styles.scss"
 import clsx from "clsx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEnvelope, faGlobe, faLock, faEye, faEyeSlash, faUser, faArrowLeft } from "@fortawesome/free-solid-svg-icons"
-import { Row } from "../../types"
+import { DataToDataLists, Row } from "../../types"
 import { ipcRenderer, remote } from "electron"
+import Mousetrap from "mousetrap"
 
 export type ModalProps = {
 	setActive: React.Dispatch<React.SetStateAction<boolean>>
@@ -13,6 +14,7 @@ export type ModalProps = {
 	updateData?: Row
 	setUpdate: React.Dispatch<React.SetStateAction<boolean>>
 	setUpdateData: React.Dispatch<React.SetStateAction<Row | undefined>>
+	dataforDataLists: DataToDataLists
 }
 const Modal: React.FC<ModalProps> = (props) => {
 	const [Site, setSite] = useState("")
@@ -34,13 +36,17 @@ const Modal: React.FC<ModalProps> = (props) => {
 	}, [props.updateData]);
 
 	useEffect(() => {
-		remote.globalShortcut.register("Escape", () => {
-			props.setActive(false)
-		})
+		if (props.active) {
+			Mousetrap.bind("escape", () => {
+				props.setActive(false)
+			})
+		} else {
+			Mousetrap.unbind("escape")
+		}
 		return () => {
-			remote.globalShortcut.unregister("Escape")
+			Mousetrap.unbind("escape")
 		};
-	}, []);
+	}, [props.active]);
 
 	const cleanState = () => {
 		setSite("")
@@ -60,7 +66,6 @@ const Modal: React.FC<ModalProps> = (props) => {
 				if (!props.update) {
 					ipcRenderer.send("requestNewRow", { site: Site, email: Email, password: Password, username: Username })
 				} else {
-					console.log("update -> ", props.updateData);
 					ipcRenderer.send("requestUpdateRow", { uuid: (props.updateData as Row).uuid, newRowData: { site: Site, email: Email, password: Password, username: Username } })
 					props.setUpdate(false)
 					props.setUpdateData(undefined)
@@ -69,12 +74,12 @@ const Modal: React.FC<ModalProps> = (props) => {
 				cleanState()
 			} else {
 				console.log("no");
+				/* !TODO SHOW ERROR HERE */
 			}
 		} else {
 			if (textArea) {
 				try {
 					const r: Row[] = JSON.parse(textArea)
-					console.log(r);
 					r.map(b => {
 						return { site: b.site, email: b.email, password: b.password, username: b.username }
 					}).forEach(row => {
@@ -96,7 +101,6 @@ const Modal: React.FC<ModalProps> = (props) => {
 	}
 	const handleOutSideClick = (e: any) => {
 		e.persist()
-		console.log(e._targetInst.pendingProps.className);
 		e._targetInst.pendingProps.className?.includes("Modal") && handleCancel(e)
 	}
 	return (
@@ -114,7 +118,10 @@ const Modal: React.FC<ModalProps> = (props) => {
 							</div>
 							<div className="email">
 								<FontAwesomeIcon color="black" icon={faEnvelope} size="lg" />
-								<input type="text" value={Email} placeholder="Email" onChange={(e) => { setEmail(e.target.value) }} />
+								<input type="text" value={Email} list="mails" placeholder="Email" onChange={(e) => { setEmail(e.target.value) }} />
+								<datalist id="mails">
+									{props.dataforDataLists.mails.map(mail => <option key={Math.random()} value={mail} />)}
+								</datalist>
 							</div>
 							<div className="username">
 								<FontAwesomeIcon color="black" icon={faUser} size="lg" />

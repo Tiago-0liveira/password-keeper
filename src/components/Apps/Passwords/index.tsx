@@ -3,11 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlus, faSearch, faTimes } from "@fortawesome/free-solid-svg-icons"
 import "./styles.scss"
 import { ipcRenderer, remote } from "electron"
-import type { Row } from "../../../types"
+import type { DataToDataLists, Row } from "../../../types"
 import Modal from "../../Modal"
 import RowComponent from "../../Row"
 import SearchBox from "../../SearchBox"
 import CardComponent from "../../Card"
+import mousetrap from "mousetrap"
 export type PasswordsComponentProps = {
 	setExtraLabel: React.Dispatch<React.SetStateAction<string>>
 }
@@ -20,18 +21,25 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = (props) => {
 	const [isSearchBoxOpen, setSearchBoxOpen] = useState(false)
 	const [filter, setFilter] = useState("")
 	const [switchValue, setSwitchValue] = useState(false)
+	const [dataforDataLists, setDataLists] = useState<DataToDataLists>({ sites: [], mails: [], usernames: [] })
 
 	useEffect(() => {
 		props.setExtraLabel(!switchValue ? "Row" : "Card")
 	}, [switchValue]);
-
+	useEffect(() => {
+		setDataLists({
+			sites: Array.from(new Set(data.map((r: Row) => r.site))),
+			mails: Array.from(new Set(data.map((r: Row) => r.email))),
+			usernames: Array.from(new Set(data.map((r: Row) => r.username)))
+		})
+	}, [data]);
 	const responseGetRowsListener = (_event: Electron.IpcRendererEvent, data: Row[]) => {
 		setData(data)
 	}
 	const responseNewRowListener = (_event: Electron.IpcRendererEvent, row: Row) => {
 		setData(beforeData => [...beforeData, row])
 	}
-	const responseDeleteRowListener = (_event: Electron.IpcRendererEvent, data: { uuid: number }) => {
+	const responseDeleteRowListener = (_event: Electron.IpcRendererEvent, data: Row) => {
 		setData(beforeData => beforeData.filter(v => v.uuid != data.uuid))
 	}
 	const responseUpdateRowListener = (_event: Electron.IpcRendererEvent, row: Row) => {
@@ -61,15 +69,15 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = (props) => {
 		ipcRenderer.on("responseNewRow", responseNewRowListener)
 		ipcRenderer.on("responseDeleteRow", responseDeleteRowListener)
 		ipcRenderer.on("responseUpdateRow", responseUpdateRowListener)
-		remote.globalShortcut.register("Ctrl+F", handleCtrlF)
-		remote.globalShortcut.register("Ctrl+PLUS", handleCtrlPlus)
+		mousetrap.bind("ctrl+f", handleCtrlF)
+		mousetrap.bind("ctrl+plus", handleCtrlPlus)
 		return () => {
 			ipcRenderer.removeListener("responseGetRows", responseGetRowsListener)
 			ipcRenderer.removeListener("responseNewRow", responseNewRowListener)
 			ipcRenderer.removeListener("responseDeleteRow", responseDeleteRowListener)
 			ipcRenderer.removeListener("responseUpdateRow", responseUpdateRowListener)
-			remote.globalShortcut.unregister("Ctrl+F")
-			remote.globalShortcut.unregister("Ctrl+PLUS")
+			mousetrap.unbind("ctrl+f")
+			mousetrap.unbind("ctrl+plus")
 		}
 	}, [])
 
@@ -134,8 +142,8 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = (props) => {
 				<div className="clearSearchFilterButton" onClick={handleClearSearchFilterButton}>
 					<FontAwesomeIcon icon={faTimes} size="lg" />
 				</div>}
-			<Modal active={isModalActive} setActive={setIsModalActive} update={isModalUpdateData} updateData={updateModalData} setUpdate={setIsModalUpdateData} setUpdateData={setUpdateModalData} />
-			{isSearchBoxOpen && <SearchBox isOpen={isSearchBoxOpen} setFilter={setFilter} setIsOpen={setSearchBoxOpen} filter={filter} />}
+			<Modal active={isModalActive} setActive={setIsModalActive} update={isModalUpdateData} updateData={updateModalData} setUpdate={setIsModalUpdateData} setUpdateData={setUpdateModalData} dataforDataLists={dataforDataLists} />
+			<SearchBox isOpen={isSearchBoxOpen} setFilter={setFilter} setIsOpen={setSearchBoxOpen} filter={filter} />
 		</div>
 	)
 }

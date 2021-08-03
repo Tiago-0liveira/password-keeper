@@ -7,6 +7,7 @@ import { faSquare as farSquare } from "@fortawesome/free-regular-svg-icons"
 import Apps from "../Apps"
 import "./styles.scss"
 import clsx from "clsx"
+import Mousetrap from "mousetrap"
 
 
 const { BrowserWindow } = remote;
@@ -35,9 +36,9 @@ const Main: React.FC = () => {
 	}
 	const handleCtrlB = toggleSideBar
 	useEffect(() => {
-		remote.globalShortcut.register("Ctrl+B", handleCtrlB)
+		Mousetrap.bind("ctrl+b", handleCtrlB)
 		return () => {
-			remote.globalShortcut.unregister("Ctrl+B")
+			Mousetrap.unbind("ctrl+b")
 		}
 	})
 

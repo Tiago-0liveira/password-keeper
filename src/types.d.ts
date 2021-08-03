@@ -7,7 +7,11 @@ export type Row = {
 	password: string
 	username: string
 }
-
+export type DataToDataLists = {
+	sites: string[]
+	mails: string[]
+	usernames: string[]
+}
 export type App = {
 	label: string
 	component: React.FC<PasswordsComponentProps>

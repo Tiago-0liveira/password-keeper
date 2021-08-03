@@ -1,7 +1,7 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import clsx from "clsx"
-import { remote } from "electron"
+import Mousetrap from "mousetrap"
 import React, { useEffect } from "react"
 import "./styles.scss"
 
@@ -13,23 +13,22 @@ export type SearchBoxProps = {
 }
 
 const SearchBox: React.FC<SearchBoxProps> = (props) => {
-	useEffect(() => {
-		remote.globalShortcut.register("Escape", () => {
-			props.setIsOpen(false)
-		})
-		return () => {
-			remote.globalShortcut.unregister("Escape")
-		};
-	}, []);
-
 	const handleResetFilter = () => { props.setFilter("") }
 	const handleClose = () => { props.setIsOpen(false) }
 	const handleOutSideClick = (e: any) => {
 		e.persist()
-		console.log(e._targetInst.pendingProps.className);
 		e._targetInst.pendingProps.className?.includes("SearchBoxWrapper") && handleClose()
 	}
-
+	useEffect(() => {
+		if (props.isOpen) {
+			Mousetrap.bind("escape", handleClose)
+		} else {
+			Mousetrap.unbind("escape")
+		}
+		return () => {
+			Mousetrap.unbind("escape")
+		};
+	}, [props.isOpen]);
 	return (
 		<div className={clsx("SearchBoxWrapper", { active: props.isOpen })} onClick={handleOutSideClick}>
 			<div className="SearchBox">

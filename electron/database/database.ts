@@ -38,7 +38,10 @@ export const deleteRow: TDeleteRow = ({ uuid }) => {
 	return new Promise((resolve, reject) => {
 		DB.run(`DELETE FROM ${dbName} WHERE uuid=?`, [uuid], (err) => {
 			if (err) reject(err)
-			resolve({ uuid })
+		})
+		DB.get(`SELECT uuid, ${dbParams} FROM ${dbName} WHERE uuid=?`, [uuid], (err, row: Row) => {
+			if (err) reject(err)
+			resolve(row)
 		})
 	})
 }
@@ -50,7 +53,6 @@ export const updateRow: TUpdateRow = ({ uuid, newRowData: { site, email, passwor
 		})
 		DB.get(`SELECT uuid, ${dbParams} FROM ${dbName} WHERE uuid=?`, [uuid], (err, row: Row) => {
 			if (err) reject(err)
-			console.log("db -> ", row);
 			resolve(row)
 		})
 	})
