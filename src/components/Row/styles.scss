@@ -13,10 +13,6 @@
 	&:hover {
 		background-color: lighten($color: $passwordsComp-bg-color, $amount: 10%);
 	}
-	&:last-of-type {
-		/* last element was hidden */
-		margin-bottom: 42px;
-	}
 	div {
 		display: flex;
 		&:not(.buttons) {
