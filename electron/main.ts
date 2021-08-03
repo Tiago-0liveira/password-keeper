@@ -58,20 +58,28 @@ app.allowRendererProcessReuse = true
 
 ipcMain.on("requestGetRows", async (event) => {
 	const rows: Row[] = await getRows()
-	console.log(`ipcMain||getRows||${rows.length} rows`)
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||getRows||${rows.length} rows`)
+	}
 	event.reply("responseGetRows", rows)
 })
 ipcMain.on("requestNewRow", async (event, data: NewRowData) => {
-	console.log(`ipcMain||newRow||${JSON.stringify(data, null, 0)}`)
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||newRow||${JSON.stringify(data, null, 0)}`)
+	}
 	newRow(data).then(async () => {
 		event.reply("responseGetRows", await getRows())
 	});
 })
 ipcMain.on("requestDeleteRow", async (event, data: { uuid: number }) => {
-	console.log(`ipcMain||deleteRow||${JSON.stringify(data, null, 0)}`)
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||deleteRow||${JSON.stringify(data, null, 0)}`)
+	}
 	event.reply("responseDeleteRow", await deleteRow({ uuid: data.uuid }))
 })
 ipcMain.on("requestUpdateRow", async (event, data: { uuid: number, newRowData: NewRowData }) => {
-	console.log(`ipcMain||updateRow||${JSON.stringify(data)}`)
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||updateRow||${JSON.stringify(data)}`)
+	}
 	event.reply("responseUpdateRow", await updateRow({ uuid: data.uuid, newRowData: data.newRowData }))
 })
