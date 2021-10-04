@@ -36,7 +36,7 @@
 			> svg {
 				color:transparent;
 				margin-left: 10px;
-				border-radius: 5px;
+				border-radius: 2px;
 				&:hover {
 					background-color: lighten($color: $passwordsComp-bg-color, $amount: 5%);;
 				}
@@ -58,7 +58,7 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				border-radius: 5px;
+				border-radius: 2px;
 				&.update {
 					background-color: yellow;
 					&:hover {
