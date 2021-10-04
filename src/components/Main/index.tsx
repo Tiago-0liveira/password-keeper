@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { remote } from "electron"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faBars, faMinus, faSquare as fasSquare, faTimes, faWindowMaximize } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRight, faBars, faMinus, faTimes, faWindowRestore } from "@fortawesome/free-solid-svg-icons"
 import PasswordApp from "../Apps/Passwords"
-import { faSquare as farSquare } from "@fortawesome/free-regular-svg-icons"
+import { faSquare } from "@fortawesome/free-regular-svg-icons"
 import Apps from "../Apps"
 import "./styles.scss"
 import clsx from "clsx"
@@ -64,12 +64,7 @@ const Main: React.FC = () => {
 						<FontAwesomeIcon icon={faMinus} size="2x" />
 					</div>
 					<div className="maximize" onClick={toggleMaximize}>
-						{isMaximized ? <div className="squares">
-							<FontAwesomeIcon className="first" icon={farSquare} size="2x" />
-							<FontAwesomeIcon className="invisible" icon={fasSquare} size="2x" />
-							<FontAwesomeIcon className="second" icon={farSquare} size="2x" swapOpacity />
-						</div> :
-							<FontAwesomeIcon icon={faWindowMaximize} size="2x" />}
+						<FontAwesomeIcon icon={isMaximized ? faWindowRestore : faSquare} size="2x" />
 					</div>
 					<div className="exit" onClick={exit}>
 						<FontAwesomeIcon icon={faTimes} size="2x" />
