@@ -1,0 +1,181 @@
+@import "../../vars";
+
+.ModalWrapper {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(20, 20, 20, 0.85);
+	opacity: 0;
+	z-index:-1;
+	transition: 0.3s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	left: 0;
+	top: 0;
+	&.active {
+		z-index: 1;
+		opacity: 1;
+		.Modal {
+			top: 0;
+		}
+	}
+	.Modal {
+		transition: 0.3s;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		top: -100%;
+		width: 100%;
+		height: 100%;
+		> form {
+			display: flex;
+			flex-direction: column;
+			background-color: $modal-background-color;
+			border-radius: 8px;
+			width: 70%;
+			max-width: 600px;
+			max-height: 420px;
+			height: 60%;
+			> div.top {
+				flex: 0.18;
+				display: flex;
+				align-items: center;
+				justify-content: left;
+				color: black;
+				h2 {
+					padding-left: 8px;
+				}
+			}
+			.content {
+				flex: 0.67;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				border-top: 2px solid $modal-stripes-color;
+				border-bottom: 2px solid $modal-stripes-color;
+				textarea {
+					width: 400px;
+    				height: 200px;
+				}
+				> div {
+					display: flex;
+					flex-direction: column;
+					justify-content: left;
+					margin-bottom: 8px;
+					input {
+						margin-top: 3px;
+						padding: 7px;
+						width: 260px;
+						font-size: 16px;
+						border-radius: 5px;
+						border:none;
+						background-color: #7c7c7c;
+						&::placeholder {
+							color: rgba(255, 255, 255, 0.548);
+						}
+					}
+					.PassInputDiv {
+						display: flex;
+						max-width: 260px;
+						margin-top: 3px;
+						input {
+							margin-top:0;
+							flex: 0.91;
+							border-radius: 5px 0 0 5px;
+						}
+						button {
+							flex: 0.09;
+							border:none;
+							border-radius: 0 5px 5px 0;
+							padding: 3px;
+							border-left: 1.5px solid rgb(204, 204, 204);
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							background-color: #7c7c7c;
+							&:hover {
+								background-color: #a0a0a0;
+							}
+							&:focus {
+								outline: none;
+							}
+							svg {
+								margin-left: 0;
+							}
+						}
+					}
+					
+					svg {
+						margin-left: 3px;
+					}
+				}
+			}
+			.bottom {
+				flex: 0.15;
+				display: flex;
+				align-items: center;
+				&.hasLeftSide {
+					justify-content: space-between;
+				}
+				&:not(.hasLeftSide) {
+					justify-content: flex-end;
+				}
+				.modalTypeDiv {
+					> span {
+						user-select: none;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						padding: 5px;
+						font-size: 20px;
+						border-radius: 5px;
+						margin-left: 10px;
+						svg {
+							margin: 0 5px 0 5px;
+							transition: 0.3s;
+							&.JSON {
+								transform: rotate(180deg);
+							}
+						}
+						span.active {
+							color: $light-blue;
+						}
+					
+						&:hover {
+							background-color: #a0a0a0;
+						}
+					}
+				}
+				.buttons {
+					margin-right: 8px;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					width: 145px;
+					button {
+						border:none;
+						border-left: 10px;
+						border-radius: 5px;
+						padding: 8px;
+						transition: 0.3s;
+						font-size: medium;
+						&.cancel {
+							background-color: $red;
+							&:hover {
+								background-color: darken($red, 15%);
+							}
+						}
+						&.confirm {
+							background-color: $green;
+							&:hover {
+								background-color: darken($green, 15%);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

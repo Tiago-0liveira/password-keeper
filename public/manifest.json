@@ -1,9 +1,9 @@
 {
-  "short_name": "NW.js React App",
-  "name": "Create NW.js React App Sample",
+  "short_name": "PasswordKeeper",
+  "name": "PasswordKeeper",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "logo.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },

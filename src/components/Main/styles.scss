@@ -1,0 +1,146 @@
+@import "../../vars";
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+$sidebar-size: 200px;
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	color: #e1e1e6;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+}
+.main {
+	width: 100vw;	
+	height: 100vh;
+	.navbar {
+		position: sticky;
+		display: flex;
+		top:0;
+		align-items: center;
+		justify-content: space-between;
+		z-index:2;
+		width: 100%;
+		height: $nav-height;
+		background-color: $nav-bar-color;
+		-webkit-app-region: drag;
+		.left {
+			flex: 0.7;
+			display: flex;
+			justify-content: flex-start;
+			.toggleSideBar-button {
+				-webkit-app-region: no-drag;
+				padding: 15px;
+				height: 100%;
+				&:hover {
+					background-color: $nav-bar-onhover-item-color;
+				}
+			}
+	
+			h3 {
+				padding-left: 10px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				span {
+					transition: 0.3s;
+					padding: 0 5px;
+					user-select: none;
+					b {
+						font-family: monospace;
+						font-size: 28px;
+					}
+					&:not(.divider) {
+						background-color: $smooth-blue;
+						border-radius: 5px;
+						padding: 0;
+						padding: 2px 5px;
+					}
+				}
+			}
+		}
+		.rigth {
+			flex: 0.3;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			div {
+				position: relative;
+				-webkit-app-region: no-drag;
+				&:hover {
+					&.exit { svg{ color: $red; } }
+					background-color: $nav-bar-onhover-item-color;
+				}
+			}
+			svg {
+				margin: 8px;
+				&:last-child {
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+	.content {
+		position: relative;
+		width: 100%;
+		height: calc(100vh - #{$nav-height});
+		
+		.sidebar {
+			height: calc(100vh - #{$nav-height});
+			width: $sidebar-size;
+			background-color: $side-bar-color;
+			float:left;
+			position: sticky;
+			bottom: 0;
+			transition: transform 0.3s;
+			&.closed {
+				transform: translateX(-$sidebar-size);
+				/*display: none;*/
+			}
+			.app {
+				width: 100%;
+				height: 50px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 10px;
+				user-select: none;
+				border-left: 4px solid transparent;
+				transition: 0.3s;
+				&.active {
+					border-left: 4px solid $green;
+				}
+				svg {
+					color: $green;
+					transition: 0.2s;
+					transform: translateX(-40px);
+					opacity: 0;
+				}
+				&:hover {
+					background-color: $nav-bar-onhover-item-color;
+					svg {
+						opacity: 1;
+						transform: translateX(0);
+					}
+				}
+			}
+		}
+		.active-app {
+			position: absolute;
+			height: calc(100vh - #{$nav-height});
+			width: calc(100% - #{$sidebar-size});
+			transition: width 0.3s;
+			right: 0;
+			&.SbClosed { 
+				width:100%;
+			}
+		}
+	}
+}

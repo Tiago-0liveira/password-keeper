@@ -1,14 +1,28 @@
 {
-  "name": "my-app-test",
+  "name": "PasswordKeeper",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-brands-svg-icons": "^5.15.3",
+    "@fortawesome/free-regular-svg-icons": "^5.15.3",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/mousetrap": "^1.6.8",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "clsx": "^1.1.1",
+    "mousetrap": "^1.6.5",
+    "node-sass": "4.14.1",
     "nw-react-scripts": "4.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "sqlite3": "^5.0.2",
+    "typescript": "^4.5.2",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -36,17 +50,24 @@
     ]
   },
   "main": "index.html",
+  "window": {
+    "icon": "./public/logo512.png",
+    "frame": false,
+    "min_width": 800,
+		"min_height": 600,
+    "position": "center",
+    "toolbar": false
+  },
   "nwBuilder": {
     "//": "https://github.com/nwjs-community/nw-builder",
     "platforms": [
       "osx64",
-      "win32",
-      "win64"
+      "win64" 
     ],
     "version": "latest",
     "flavor": "normal",
     "buildDir": "./build",
     "cacheDir": "./cache",
-    "macIcns": "./src/logo.icns"
+    "macIcns": "./public/logo.icns"
   }
 }
