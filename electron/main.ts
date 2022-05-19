@@ -7,6 +7,8 @@ import * as url from "url"
 import { NewRowData, Row } from "../src/types"
 import { getRows, deleteRow, newRow, updateRow } from "./database/database";
 
+import {winUsers, shutDownSteam, getSteamProcess, runasUser} from "./steam"
+
 let mainWindow: Electron.BrowserWindow | null
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true"
 function createWindow() {
@@ -82,4 +84,31 @@ ipcMain.on("requestUpdateRow", async (event, data: { uuid: number, newRowData: N
 		console.log(`ipcMain||updateRow||${JSON.stringify(data)}`)
 	}
 	event.reply("responseUpdateRow", await updateRow({ uuid: data.uuid, newRowData: data.newRowData }))
+})
+
+ipcMain.on("requestSteamActiveUser", async (event) => {
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||steamActiveUser`)
+	}
+
+	event.reply("responseSteamActiveUser", await getSteamProcess())
+})
+
+ipcMain.on("requestSteamChangeUser", async (event, data: { username: string }) => {
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||requestSteamChangeUser`)
+	}
+
+	if (winUsers.includes(data.username)) {
+		if ((await getSteamProcess()).running) {
+			await shutDownSteam()
+		}
+		event.reply("responseSteamChangeUser", await runasUser(data.username))
+	}
+})
+ipcMain.on("requestSteamShutdown", async (event) => {
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||requestSteamShutdown`)
+	}
+	event.reply("responseSteamShutdown", await shutDownSteam())
 })
