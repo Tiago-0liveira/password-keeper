@@ -39,7 +39,9 @@ module.exports = {
 		filename: "js/[name].js",
 		publicPath: "./"
 	},
-	plugins: [new HtmlWebpackPlugin()],
+	plugins: [new HtmlWebpackPlugin({
+		title: "Password Keeper"
+	})],
 	externals: {
 		sqlite3: "commonjs sqlite3"
 	}
