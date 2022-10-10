@@ -7,7 +7,11 @@ mainElement.setAttribute("id", "root")
 document.body.appendChild(mainElement)
 
 const App = () => {
-	return <Main />
+	return (
+		<React.StrictMode >
+			<Main />
+		</React.StrictMode>
+	)
 }
 
 render(<App />, mainElement)
