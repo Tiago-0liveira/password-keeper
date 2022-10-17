@@ -2,12 +2,6 @@ import {exec} from "child_process"
 
 export const winUsers = ["tfgol", "tiago", "tiago_1p3y8sg"]
 
-type process = {
-	running: boolean,
-	PID?: number,
-	USERNAME?: string
-}
-
 export const shutDownSteam = () => new Promise<void>((resolve, reject) => {
 	exec("taskkill /f /im steam.exe", (err, stdout, stderr) => {
 		if (err) reject(err)
@@ -15,7 +9,7 @@ export const shutDownSteam = () => new Promise<void>((resolve, reject) => {
 	})
 })
 
-export const getSteamProcess = () => new Promise<process>((resolve, reject) => {
+export const getSteamProcess = () => new Promise<WindowsProcess>((resolve, reject) => {
 	exec(`tasklist /v /FI "IMAGENAME eq steam.exe" /FO list`, function(err, stdout, stderr) {
 		if (err) {
 			reject(err)
