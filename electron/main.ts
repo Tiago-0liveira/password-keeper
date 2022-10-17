@@ -4,15 +4,12 @@ import { app, BrowserWindow, ipcMain } from "electron"
 import * as path from "path"
 import * as url from "url"
 
-import { NewRowData, Row } from "../src/types"
 import { getRows, deleteRow, newRow, updateRow } from "./database/database";
-
 import {winUsers, shutDownSteam, getSteamProcess, runasUser} from "./steam"
 
 let mainWindow: Electron.BrowserWindow | null
 
 app.allowRendererProcessReuse = true
-console.log(process.argv)
 let steamTaskRan = false
 app.setJumpList([
     {
