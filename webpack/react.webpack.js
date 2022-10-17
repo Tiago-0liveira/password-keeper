@@ -40,8 +40,9 @@ module.exports = {
 		publicPath: "./"
 	},
 	plugins: [new HtmlWebpackPlugin({
-		title: "Password Keeper"
-	})],
+		title: "Password Keeper",
+        favicon: "./build/vault.png"
+    })],
 	externals: {
 		sqlite3: "commonjs sqlite3"
 	}
