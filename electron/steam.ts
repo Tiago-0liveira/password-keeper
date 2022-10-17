@@ -23,7 +23,7 @@ export const getSteamProcess = () => new Promise<process>((resolve, reject) => {
 		if (stdout.includes("INFO: No tasks are running which match the specified criteria.")) { /* YES THIS IS HARDCODED */
 			resolve({running: false})
 		} else {
-			var lines = stdout.replace(/(?:\r)+/g, "").split("\n").slice(1, -1);
+			const lines = stdout.replace(/(?:\r)+/g, "").split("\n").slice(1, -1);
 			let process = {
 				running: true,
 				PID: Number(lines[1].split(new RegExp(/ +/))[1]),
@@ -35,8 +35,12 @@ export const getSteamProcess = () => new Promise<process>((resolve, reject) => {
 })
 
 export const runasUser = (username: string) => new Promise<void>((resolve, reject) => {
-	exec(`runas.exe /user:${username} /savecred "C:\\Program Files (x86)\\Steam\\steam.exe"`, (err, stdout, stderr) => {
-		if (err) reject(err)
-		resolve()
-	})
+    if (username === process.env["USERNAME"]) {
+        exec("\"C:\\Program Files (x86)\\Steam\\steam.exe\"")
+    } else {
+        exec(`runas.exe /user:${username} /savecred "C:\\Program Files (x86)\\Steam\\steam.exe"`, (err, stdout, stderr) => {
+    		if (err) reject(err)
+    		resolve()
+        })
+    }
 })
