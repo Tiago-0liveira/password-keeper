@@ -10,41 +10,68 @@ import { getRows, deleteRow, newRow, updateRow } from "./database/database";
 import {winUsers, shutDownSteam, getSteamProcess, runasUser} from "./steam"
 
 let mainWindow: Electron.BrowserWindow | null
-process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true"
-function createWindow() {
-	mainWindow = new BrowserWindow({
-		width: 1000,
-		height: 650,
-		backgroundColor: "#191622",
-		center: true,
-		frame: false,
-		title: "Password Keeper",
-		minWidth: 800,
-		minHeight: 600,
-		webPreferences: {
-			nodeIntegration: true,
-			enableRemoteModule: true
-		}
-	})
 
-	if (process.env.NODE_ENV === "development") {
-		mainWindow.loadURL("http://localhost:4000")
-	} else {
-		mainWindow.loadURL(
-			url.format({
-				pathname: path.join(__dirname, "renderer/index.html"),
-				protocol: "file:",
-				slashes: true
-			})
-		)
-	}
-
-	mainWindow.on("closed", () => {
-		mainWindow = null
-	})
+app.allowRendererProcessReuse = true
+console.log(process.argv)
+let steamTaskRan = false
+app.setJumpList([
+    {
+        name: 'Steam Accounts',
+        items: winUsers.map((user, i) => {
+            return {
+                type: 'task',
+                title: user,
+                program: process.execPath,
+                args: `--run-steam=${user}`,
+                iconIndex: i,
+                description: `Opens steam as ${user}`
+            }
+        })
+    }
+])
+let steamSwitch = app.commandLine.getSwitchValue("run-steam")
+if (winUsers.includes(steamSwitch)) {
+    steamTaskRan = true
+    getSteamProcess().then(async ({running}) => {
+        if (running) await shutDownSteam()
+        await runasUser(steamSwitch)
+        process.exit(0)
+    }).catch(console.log)
 }
 
-app.on("ready", createWindow)
+function createWindow() {
+    mainWindow = new BrowserWindow({
+        width: 1000,
+        height: 650,
+        backgroundColor: "#191622",
+        center: true,
+        frame: false,
+        title: "Password Keeper",
+        minWidth: 800,
+        minHeight: 600,
+        icon: "./build/vault.png",
+        webPreferences: {
+            nodeIntegration: true,
+            enableRemoteModule: true
+        }
+    })
+
+    if (process.env.NODE_ENV === "development") {
+        mainWindow.loadURL("http://localhost:4000")
+    } else {
+        mainWindow.loadURL(url.format({
+            pathname: path.join(__dirname, "renderer/index.html"),
+            protocol: "file:",
+            slashes: true
+        }))
+    }
+
+    mainWindow.on("closed", () => {
+        mainWindow = null
+    })
+}
+
+!steamTaskRan && app.on("ready", createWindow)
 	.whenReady()
 	.then(() => {
 		if (process.env.NODE_ENV === "development") {
@@ -56,7 +83,6 @@ app.on("ready", createWindow)
 		}
 
 	})
-app.allowRendererProcessReuse = true
 
 ipcMain.on("requestGetRows", async (event) => {
 	const rows: Row[] = await getRows()
