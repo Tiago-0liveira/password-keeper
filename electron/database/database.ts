@@ -1,4 +1,3 @@
-import type { TgetRows, TnewRow, TDeleteRow, TUpdateRow, Row } from "../../src/types"
 import sqlite3 from "sqlite3"
 import { app } from "electron"
 import path from "path"
