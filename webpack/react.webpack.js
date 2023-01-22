@@ -39,10 +39,12 @@ module.exports = {
 		filename: "js/[name].js",
 		publicPath: "./"
 	},
-	plugins: [new HtmlWebpackPlugin({
-		title: "Password Keeper",
-        favicon: "./build/vault.png"
-    })],
+	plugins: [
+		new HtmlWebpackPlugin({
+			title: "Password Keeper",
+			favicon: "./build/vault.png"
+		})
+	],
 	externals: {
 		sqlite3: "commonjs sqlite3"
 	}
