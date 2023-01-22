@@ -7,3 +7,4 @@ prisma/*.db*
 electron/database/generated
 electron/data.json
 db.db
+.idea/
