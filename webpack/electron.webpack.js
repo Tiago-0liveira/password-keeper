@@ -1,5 +1,6 @@
 const path = require("path")
-const nodeExternals = require('webpack-node-externals');
+const nodeExternals = require("webpack-node-externals")
+const CopyPlugin = require("copy-webpack-plugin")
 
 const rootPath = path.resolve(__dirname, "..")
 
@@ -28,5 +29,10 @@ module.exports = {
 	output: {
 		path: path.resolve(rootPath, "dist"),
 		filename: "[name].js"
-	}
+	},
+	plugins: [
+		new CopyPlugin({
+			patterns: [{ from: "electron/preload.js", to: "preload.js" }]
+		})
+	]
 }
