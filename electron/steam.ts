@@ -9,7 +9,7 @@ export const shutDownSteam = () => new Promise<void>((resolve, reject) => {
 	})
 })
 
-export const getSteamProcess = () => new Promise<WindowsProcess>((resolve, reject) => {
+export const getSteamProcess = () => new Promise<WindowsProcess | WindowsRunningProcess>((resolve, reject) => {
 	exec(`tasklist /v /FI "IMAGENAME eq steam.exe" /FO list`, function(err, stdout, stderr) {
 		if (err) {
 			reject(err)

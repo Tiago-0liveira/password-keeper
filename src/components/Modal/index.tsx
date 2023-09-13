@@ -3,17 +3,12 @@ import "./styles.scss"
 import clsx from "clsx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEnvelope, faGlobe, faLock, faEye, faEyeSlash, faUser, faArrowLeft } from "@fortawesome/free-solid-svg-icons"
-import { DataToDataLists, Row } from "../../types"
-import { ipcRenderer, remote } from "electron"
+import { ipcRenderer } from "electron"
 import Mousetrap from "mousetrap"
 
 export type ModalProps = {
-	setActive: React.Dispatch<React.SetStateAction<boolean>>
-	active: boolean
-	update: boolean
-	updateData?: Row
-	setUpdate: React.Dispatch<React.SetStateAction<boolean>>
-	setUpdateData: React.Dispatch<React.SetStateAction<Row | undefined>>
+	setModalData: React.Dispatch<React.SetStateAction<ModalData>>
+	modalData: ModalData
 	dataforDataLists: DataToDataLists
 }
 const Modal: React.FC<ModalProps> = (props) => {
@@ -25,20 +20,20 @@ const Modal: React.FC<ModalProps> = (props) => {
 	const [modalIsText, setModalIsText] = useState(true)
 	const [textArea, setTextArea] = useState("")
 	useEffect(() => {
-		if (props.updateData) {
-			setSite(props.updateData.site)
-			setEmail(props.updateData.email)
-			setUsername(props.updateData.username)
-			setPassword(props.updateData.password)
+		if (props.modalData.updateData) {
+			setSite(props.modalData.updateData.site)
+			setEmail(props.modalData.updateData.email)
+			setUsername(props.modalData.updateData.username)
+			setPassword(props.modalData.updateData.password)
 		} else {
 			cleanState()
 		}
-	}, [props.updateData]);
+	}, [props.modalData.updateData]);
 
 	useEffect(() => {
-		if (props.active) {
+		if (props.modalData.active) {
 			Mousetrap.bind("escape", () => {
-				props.setActive(false)
+				props.setModalData((prev) => {return {...prev, active:false}})
 			})
 		} else {
 			Mousetrap.unbind("escape")
@@ -46,7 +41,7 @@ const Modal: React.FC<ModalProps> = (props) => {
 		return () => {
 			Mousetrap.unbind("escape")
 		};
-	}, [props.active]);
+	}, [props.modalData.active]);
 
 	const cleanState = () => {
 		setSite("")
@@ -63,14 +58,15 @@ const Modal: React.FC<ModalProps> = (props) => {
 		e.preventDefault()
 		if (modalIsText) {
 			if ([Site, Email, Password].every(s => s.trim() != "" && s.trim().length > 2)) {
-				if (!props.update) {
-					ipcRenderer.send("requestNewRow", { site: Site, email: Email, password: Password, username: Username })
+				if (!props.modalData.updating) {
+					/*ipcRenderer.send("requestNewRow", { site: Site, email: Email, password: Password, username: Username })*/
+					window.electronAPI.newRow({ site: Site, email: Email, password: Password, username: Username })
 				} else {
-					ipcRenderer.send("requestUpdateRow", { uuid: (props.updateData as Row).uuid, newRowData: { site: Site, email: Email, password: Password, username: Username } })
-					props.setUpdate(false)
-					props.setUpdateData(undefined)
+					/*ipcRenderer.send("requestUpdateRow", { uuid: (props.modalData.updateData as Row).uuid, newRowData: { site: Site, email: Email, password: Password, username: Username } })*/
+					window.electronAPI.updateRow((props.modalData.updateData as Row).uuid, { site: Site, email: Email, password: Password, username: Username })
+					props.setModalData((prev) => {return {...prev, updating:false, updateData:undefined}})
 				}
-				props.setActive(false)
+				props.setModalData((prev) => {return {...prev, active:false}})
 				cleanState()
 			} else {
 				console.log("no");
@@ -83,9 +79,10 @@ const Modal: React.FC<ModalProps> = (props) => {
 					r.map(b => {
 						return { site: b.site, email: b.email, password: b.password, username: b.username }
 					}).forEach(row => {
-						ipcRenderer.send("requestNewRow", row)
+						window.electronAPI.newRow(row)
+						/*ipcRenderer.send("requestNewRow", row)*/
 					});
-					props.setActive(false)
+					props.setModalData((prev) => {return {...prev, active:false}})
 					cleanState()
 				} catch (error) {
 					console.error(error);
@@ -95,20 +92,18 @@ const Modal: React.FC<ModalProps> = (props) => {
 	}
 	const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault()
-		props.setActive(false)
-		props.setUpdate(false)
-		props.setUpdateData(undefined)
+		props.setModalData({active: false, updating: false, updateData: undefined})
 	}
 	const handleOutSideClick = (e: any) => {
 		e.persist()
 		e._targetInst.pendingProps.className?.includes("Modal") && handleCancel(e)
 	}
 	return (
-		<div className={clsx("ModalWrapper", { active: props.active })} onClick={handleOutSideClick}>
+		<div className={clsx("ModalWrapper", { active: props.modalData.active })} onClick={handleOutSideClick}>
 			<div className="Modal">
 				<form onSubmit={handleOnSubmit}>
 					<div className="top">
-						<h2>{props.update ? "Update Row" : "New Row"}</h2>
+						<h2>{props.modalData.updating ? "Update Row" : "New Row"}</h2>
 					</div>
 					<div className="content">
 						{modalIsText ? <>
@@ -138,8 +133,8 @@ const Modal: React.FC<ModalProps> = (props) => {
 							<textarea name="json" id="json" onChange={(e) => { setTextArea(e.target.value) }} />
 						</>}
 					</div>
-					<div className={clsx("bottom", { hasLeftSide: !props.update })}>
-						{!props.update && <div className="modalTypeDiv">
+					<div className={clsx("bottom", { hasLeftSide: !props.modalData.updating })}>
+						{!props.modalData.updating && <div className="modalTypeDiv">
 							<span onClick={() => { setModalIsText(b => !b) }}><span className={clsx("text", { active: modalIsText })}> <b>Text</b> </span> <FontAwesomeIcon className={modalIsText ? "TEXT" : "JSON"} icon={faArrowLeft} size="1x" /> <span className={clsx("json", { active: !modalIsText })}> <b>Json</b> </span></span>
 						</div>}
 						<div className="buttons">

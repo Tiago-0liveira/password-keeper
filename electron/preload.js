@@ -6,7 +6,7 @@ console.log("preload.ts || loaded")
 /*electron.contextBridge.exposeInMainWorld('electronAPI', 
 */
 window.electronAPI = {
-	getRows: async () => await electron.ipcRenderer.invoke("requestGetRows"),
+	getRows: async (query = "", sort = false) => await electron.ipcRenderer.invoke("requestGetRows", { query, sort }),
 	newRow: async (data) => await electron.ipcRenderer.invoke("requestNewRow", data),
 	deleteRow: async (uuid) => await electron.ipcRenderer.invoke("requestDeleteRow", { uuid }),
 	updateRow: async (uuid, data) => await electron.ipcRenderer.invoke("requestUpdateRow", { uuid, data }),

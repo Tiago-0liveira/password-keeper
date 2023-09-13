@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import "./styles.scss"
-import type { Row } from "../../types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClipboardList, faEye, faEyeSlash, faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons"
 import clsx from "clsx"
@@ -49,4 +48,4 @@ const CardComponent: React.FC<CardProps> = (props) => {
 	)
 }
 
-export default CardComponent
+export default React.memo(CardComponent)

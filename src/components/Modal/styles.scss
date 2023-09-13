@@ -33,7 +33,7 @@
 			display: flex;
 			flex-direction: column;
 			background-color: $modal-background-color;
-			border-radius: 8px;
+			border-radius: 5px;
 			width: 70%;
 			max-width: 600px;
 			max-height: 420px;
@@ -158,8 +158,8 @@
 					button {
 						border:none;
 						border-left: 10px;
-						border-radius: 5px;
-						padding: 8px;
+						border-radius: 4px;
+						padding: 7px;
 						transition: 0.3s;
 						font-size: medium;
 						&.cancel {

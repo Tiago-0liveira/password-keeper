@@ -7,7 +7,7 @@ export const validateNewRow = (data: NewRowData): ValidateError | NewRowData => 
 		return ValidateError.site
 	} else if (email.length <= 3) {
 		return ValidateError.emailLength
-	} else if (!/(.+)@(.+){2,}\.(.+){2,}/) {
+	} else if (!/(.+)@(.+){2,}\.(.+){2,}/.test(email)) {
 		return ValidateError.emailFormat
 	} else if (password.length <= 3) {
 		return ValidateError.password

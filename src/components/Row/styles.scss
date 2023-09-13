@@ -1,48 +1,65 @@
 @import "../../vars";
 
 .Row {
-	display: flex;
-	justify-content: space-evenly;
-	align-items: center;
+	display: grid;
+	grid-template-columns: $PasswordGrid;
 	width: 100%;
 	height: $row-height;
-	border: 1px solid;
-	border-width: 0px 0 1px 0;
+	font-size: 15px;
+	background-color: $row-background;
+	&:not(:last-child) {
+		border-bottom: 2px solid darken($passwordsComp-bg-color, 10%);
+	}
 	position: relative;
-	transition: background-color 0.1s; 
-	&:hover {
-		background-color: lighten($color: $passwordsComp-bg-color, $amount: 10%);
+	transition: background-color 0.1s;
+	&.hidden {
+		display: none;
 	}
 	div {
 		display: flex;
-		&:not(.buttons) {
-			width: 23%;
+		margin: 3px;
+		border-radius: 4px;
+		&:hover:not(:last-child):not([username=""]) {
+			background-color: lighten($color: $row-background, $amount: 10%);
 		}
+		&:active:not(:last-child):not([username=""]) {
+			background-color: lighten($color: $row-background, $amount: 13%);
+		}
+		&:not(:last-child) {
+			border-right: $gridBorder;
+		}
+		//justify-content: center;
+
 		span.value {
+			padding-left: 5px;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			padding: 5px;
-			border-radius: 5px;
-			transition: background-color 0.1s;
+			//padding: 5px;
+			//border-radius: 5px;
+			//transition: background-color 0.1s;
 			user-select: none;
-			&:hover {
+			/*&:hover {
 				background-color: darken($color: $passwordsComp-bg-color, $amount: 1%);
 				svg {
 					color:white;
 				}
 				z-index:1;
-			}
+			}*/
 			> svg {
-				color:transparent;
+				margin-right: 5px;
+				&.google-icon {
+					color: $blue-jeans;
+				}
+				/*color:transparent;
 				margin-left: 10px;
 				border-radius: 2px;
 				&:hover {
 					background-color: lighten($color: $passwordsComp-bg-color, $amount: 5%);;
-				}
+				}*/
 			}
 		}
-		
+
 		&.site {
 			.value {
 				&::first-letter {
@@ -51,7 +68,10 @@
 			}
 		}
 		&.buttons {
-			width: 70px;
+			padding-right: 5px;
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
 			button {
 				padding: 5px;
 				border: 0;
@@ -59,6 +79,18 @@
 				justify-content: center;
 				align-items: center;
 				border-radius: 2px;
+				font-size: 11px;
+				&.eye:hover,
+				&.update:hover,
+				&.delete:hover {
+					transform: scale(1.1);
+				}
+				&.eye {
+					background-color: $white-azure;
+					&:hover {
+						background-color: $lavender-gray;
+					}
+				}
 				&.update {
 					background-color: yellow;
 					&:hover {
@@ -66,11 +98,9 @@
 					}
 				}
 				&.delete {
-					margin-left: 5px;
 					background-color: $red;
-					padding: 5px 6px 5px 6px;
 					&:hover {
-						background-color: darken($red,15%);
+						background-color: darken($red, 15%);
 					}
 				}
 				&:focus {

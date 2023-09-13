@@ -24,6 +24,12 @@
 		"files": [
 			"dist/**/*"
 		],
+		"extraResources": [
+			{
+				"from": "./public/assets",
+				"to": "assets"
+			}
+		],
 		"win": {
 			"target": [
 				"nsis"
@@ -33,7 +39,7 @@
 		"nsis": {
 			"installerIcon": "build/icon.ico",
 			"uninstallerIcon": "build/icon.ico",
-			"uninstallDisplayName": "Uninstaller PasswordKeeper",
+			"uninstallDisplayName": "PasswordKeeper",
 			"license": "license.txt",
 			"oneClick": false,
 			"allowToChangeInstallationDirectory": true
@@ -57,9 +63,7 @@
 		"babel-loader": "^8.1.0",
 		"copy-webpack-plugin": "6",
 		"cross-env": "^7.0.2",
-		"electron": "^8.2.2",
 		"electron-devtools-installer": "^3.1.0",
-		"eslint": "^7.3.1",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-config-standard": "^14.1.1",
 		"eslint-import-resolver-typescript": "^2.0.0",
@@ -88,13 +92,16 @@
 		"@fortawesome/free-solid-svg-icons": "^5.15.3",
 		"@fortawesome/react-fontawesome": "^0.1.14",
 		"@types/mousetrap": "^1.6.8",
+		"@types/react-window": "^1.8.5",
 		"clsx": "^1.1.1",
 		"core-js": "^3.14.0",
 		"css-loader": "^5.2.6",
+		"electron": "8.2.2",
 		"mousetrap": "^1.6.5",
 		"node-sass": "^6.0.0",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
+		"react-window": "^1.8.8",
 		"regenerator-runtime": "^0.13.7",
 		"sass-loader": "10",
 		"sqlite3": "^5.0.2",

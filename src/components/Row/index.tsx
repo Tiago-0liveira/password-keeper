@@ -1,37 +1,47 @@
 import React, { useState } from "react"
 import "./styles.scss"
-import type { Row } from "../../types"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClipboardList, faEye, faEyeSlash, faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons"
+import ICONS from "../Icons"
+import clsx from "clsx"
 
 export interface RowProps {
 	row: Row
 	handleUpdate: (row: Row) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 	handleDelete: (row: Row) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+	hidden?: boolean
+	style: React.CSSProperties
 }
 
 const RowComponent: React.FC<RowProps> = (props) => {
 	const [isPassHidden, setIsPassHidden] = useState(true)
+
+	const setClipBoardText = (text: string) => () => { navigator.clipboard.writeText(text) }
+
 	return (
-		<div className="Row" key={`${props.row.uuid}${Math.random().toFixed(4)}`}>
-			<div className="site">
-				<span className="value">{props.row.site}<FontAwesomeIcon icon={faClipboardList} onClick={() => navigator.clipboard.writeText(props.row.site)} size="lg" /></span>
+		<div style={props.style} className={clsx("Row", { hidden: props.hidden })} key={`${props.row.uuid}${Math.random().toFixed(4)}`}>
+			<div className="site" onClick={setClipBoardText(props.row.site)}>
+				<span className="value">{props.row.site}{/*{ICONS.row.clipboard}*/}</span>
 			</div>
-			<div className="email">
-				<span className="value">{props.row.email}<FontAwesomeIcon icon={faClipboardList} onClick={() => navigator.clipboard.writeText(props.row.email)} size="lg" /></span>
+			<div className="email" onClick={setClipBoardText(props.row.email)}>
+				<span className="value">{props.row.email.endsWith("@gmail.com") ?
+					<>{ICONS.global.google("google-icon")}{props.row.email.slice(0, props.row.email.indexOf("@"))}</> :
+					<>{props.row.email}</>}
+
+					{/*{ICONS.row.clipboard}*/}
+				</span>
 			</div>
-			<div className="username">
-				<span className="value">{props.row.username && props.row.username}{props.row.username && <FontAwesomeIcon icon={faClipboardList} onClick={() => navigator.clipboard.writeText(props.row.username)} size="lg" />}</span>
+			<div className="username" onClick={setClipBoardText(props.row.username)} {...{username: props.row.username ?? ""}}>
+				<span className="value">{props.row.username && props.row.username}{/*{props.row.username && ICONS.row.clipboard}*/}</span>
 			</div>
-			<div className="password">
-				<span className="value">{isPassHidden ? "*".repeat(12) : props.row.password}<FontAwesomeIcon icon={faClipboardList} onClick={() => navigator.clipboard.writeText(props.row.password)} size="lg" /><FontAwesomeIcon icon={isPassHidden ? faEyeSlash : faEye} onClick={() => setIsPassHidden(b => !b)} /></span>
+			<div className="password" onClick={setClipBoardText(props.row.password)}>
+				<span className="value">{isPassHidden ? "************" : props.row.password}{/*{ICONS.row.clipboard}*/}{/*<FontAwesomeIcon icon={isPassHidden ? faEyeSlash : faEye} onClick={() => setIsPassHidden(b => !b)} />*/}</span>
 			</div>
 			<div className="buttons">
-				<button className="update" onClick={props.handleUpdate(props.row)}><FontAwesomeIcon icon={faPencilAlt} size="lg" /></button>
-				<button className="delete" onClick={props.handleDelete(props.row)}><FontAwesomeIcon icon={faTimes} size="lg" /></button>
+				<button className="eye" onClick={() => setIsPassHidden(b => !b)}>{isPassHidden ? ICONS.row.eye.on : ICONS.row.eye.off}</button>
+				<button className="update" onClick={props.handleUpdate(props.row)}>{ICONS.row.update}</button>
+				<button className="delete" onClick={props.handleDelete(props.row)}>{ICONS.row.delete}</button>
 			</div>
 		</div>
 	)
 }
 
-export default RowComponent
+export default React.memo(RowComponent)

@@ -4,14 +4,14 @@ import { ipcRenderer } from "electron"
 
 export interface RowListProps {
 	rows: Row[]
-	filter: Filter
+	setData: React.Dispatch<React.SetStateAction<Row[]>>
 	//setModalData: React.Dispatch<React.SetStateAction<ModalData>>
 }
 
 const RowList: React.FC<RowListProps> = (props) => {
-	const [data, setData] = useState<Row[]>([])
+	//const [data, setData] = useState<Row[]>([])
 
-	useEffect(() => {
+	/*useEffect(() => {
 		let cleanData = props.rows
 		if (props.filter.active) {
 			cleanData = cleanData.filter(row =>
@@ -29,11 +29,11 @@ const RowList: React.FC<RowListProps> = (props) => {
 			)
 		}
 		setData(cleanData)
-	}, [props])
+	}, [props])*/
 
 	const handleUpdate = (row: Row) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault()
-		
+
 		//props.setModalData({active:true, updating:true, updateData:row})
 	}
 	const handleDelete = (row: Row) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -41,7 +41,7 @@ const RowList: React.FC<RowListProps> = (props) => {
 		console.log(row.uuid)
 		window.electronAPI.deleteRow(row.uuid).then(r => {
 			//console.log(`deleted ${JSON.stringify(row)}|${r}`)
-			setData(prev => prev.filter(r => r.uuid !== row.uuid))
+			props.setData(prev => prev.filter(r => r.uuid !== row.uuid))
 		}).catch((e) => { console.log(`error deleting row id:${row.uuid}|e=`, e) })
 	}
 
@@ -56,8 +56,8 @@ const RowList: React.FC<RowListProps> = (props) => {
                         row.site.toLowerCase().includes(props.filter) ||
                         row.username?.toLowerCase().includes(props.filter)
 						//row.email.toLowerCase().includes(props.filter) ||
-					)*/data.map(row => <RowComponent
-				key={`${row.uuid}${Math.random().toFixed(4)}`}
+					)*/props.rows.map(row => <RowComponent
+				key={`${row.uuid}`}
 				row={row}
 				handleUpdate={handleUpdate}
 				handleDelete={handleDelete}

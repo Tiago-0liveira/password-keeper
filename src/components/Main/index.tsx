@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { remote } from "electron"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faBars, faMinus, faTimes, faWindowRestore } from "@fortawesome/free-solid-svg-icons"
-import PasswordApp from "../Apps/Passwords"
-import { faSquare } from "@fortawesome/free-regular-svg-icons"
+import PasswordApp from "../Apps/Passwords/index"
 import Apps from "../Apps"
 import "./styles.scss"
 import clsx from "clsx"
 import Mousetrap from "mousetrap"
-
+import icons from "../Icons"
 
 const { BrowserWindow } = remote;
 
@@ -47,7 +44,7 @@ const Main: React.FC = () => {
 			<div className="navbar">
 				<div className="left">
 					<div className="toggleSideBar-button" onClick={toggleSideBar}>
-						<FontAwesomeIcon icon={faBars} size="lg" />
+						{icons.main.bars}
 					</div>
 					<h3>
 						<span>PasswordKeeper</span>
@@ -61,13 +58,14 @@ const Main: React.FC = () => {
 				</div>
 				<div className="rigth">
 					<div className="minimize" onClick={minimize}>
-						<FontAwesomeIcon icon={faMinus} size="2x" />
+
+						{icons.main.minimize}
 					</div>
 					<div className="maximize" onClick={toggleMaximize}>
-						<FontAwesomeIcon icon={isMaximized ? faWindowRestore : faSquare} size="2x" />
+						{isMaximized ? icons.main.maximize.maximized : icons.main.maximize.not}
 					</div>
 					<div className="exit" onClick={exit}>
-						<FontAwesomeIcon icon={faTimes} size="2x" />
+						{icons.main.exit}
 					</div>
 				</div>
 			</div>
@@ -76,7 +74,7 @@ const Main: React.FC = () => {
 					{Apps.map((app, i) => (
 						<div className={clsx("app", app.label === activeApp.label ? "active" : "")} key={i} onClick={setApp(i)}>
 							<p><b>{app.label}</b></p>
-							<FontAwesomeIcon icon={faArrowRight} size="1x" />
+							{icons.main.sidebarArrow}
 						</div>
 					))}
 				</div>

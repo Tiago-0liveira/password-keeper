@@ -15,9 +15,14 @@ DB.run(`CREATE TABLE IF NOT EXISTS ${dbName} (
 	username TEXT
 )`)
 
-export const getRows: TgetRows = () => {
+export const getRows: TgetRows = (search, sort) => {
 	return new Promise((resolve, reject) => {
-		DB.all(`SELECT uuid, ${dbParams} FROM ${dbName}`, (err, rows: Row[]) => {
+		let query = `SELECT uuid, ${dbParams} FROM ${dbName}`
+
+		if (search) query += ` WHERE site LIKE '%${search}%' OR username LIKE '%${search}%'`
+		if (sort) query += " ORDER BY site ASC, email ASC, username ASC"
+
+		DB.all(query, (err, rows: Row[]) => {
 			if (err) reject(err)
 			resolve(rows)
 		})

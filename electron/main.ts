@@ -5,67 +5,71 @@ import * as path from "path"
 import * as url from "url"
 
 import { getRows, deleteRow, newRow, updateRow } from "./database/database";
-import {winUsers, shutDownSteam, getSteamProcess, runasUser} from "./steam"
+import { winUsers, shutDownSteam, getSteamProcess, runasUser } from "./steam"
+import { steamICO } from "./Images";
+import { validateNewRow } from "./helpers";
 
 let mainWindow: Electron.BrowserWindow | null
 
 app.allowRendererProcessReuse = true
 let steamTaskRan = false
 app.setJumpList([
-    {
-        name: 'Steam Accounts',
-        items: winUsers.map((user, i) => {
-            return {
-                type: 'task',
-                title: user,
-                program: process.execPath,
-                args: `--run-steam=${user}`,
-                iconIndex: i,
-                description: `Opens steam as ${user}`
-            }
-        })
-    }
+	{
+		name: 'Steam Accounts',
+		items: winUsers.map((user, i) => {
+			return {
+				type: 'task',
+				title: user,
+				program: process.execPath,
+				args: `--run-steam=${user}`,
+				iconIndex: i,
+				iconPath: steamICO,
+				description: `Opens steam as ${user}`
+			}
+		})
+	}
 ])
 let steamSwitch = app.commandLine.getSwitchValue("run-steam")
 if (winUsers.includes(steamSwitch)) {
-    steamTaskRan = true
-    getSteamProcess().then(async ({running}) => {
-        if (running) await shutDownSteam()
-        await runasUser(steamSwitch)
-        process.exit(0)
-    }).catch(console.log)
+	steamTaskRan = true
+	getSteamProcess().then(async ({ running }) => {
+		if (running) await shutDownSteam()
+		await runasUser(steamSwitch)
+		process.exit(0)
+	}).catch(console.log)
 }
 
 function createWindow() {
-    mainWindow = new BrowserWindow({
-        width: 1000,
-        height: 650,
-        backgroundColor: "#191622",
-        center: true,
-        frame: false,
-        title: "Password Keeper",
-        minWidth: 800,
-        minHeight: 600,
-        icon: "./build/vault.png",
-        webPreferences: {
-            nodeIntegration: true,
-            enableRemoteModule: true
-        }
-    })
+	mainWindow = new BrowserWindow({
+		width: 1050,
+		height: 650,
+		backgroundColor: "#191622",
+		center: true,
+		frame: false,
+		title: "Password Keeper",
+		minWidth: 1050,
+		minHeight: 600,
+		icon: "./build/vault.png",
+		webPreferences: {
+			nodeIntegration: true,
+			//contextIsolation: true,
+			preload: path.join(__dirname, 'preload.js')
+		}
+	})
 
-    if (process.env.NODE_ENV === "development") {
-        mainWindow.loadURL("http://localhost:4000")
-    } else {
-        mainWindow.loadURL(url.format({
-            pathname: path.join(__dirname, "renderer/index.html"),
-            protocol: "file:",
-            slashes: true
-        }))
-    }
+	if (process.env.NODE_ENV === "development") {
+		mainWindow.loadURL("http://localhost:4000")
+	} else {
+		mainWindow.loadURL(url.format({
+			pathname: path.join(__dirname, "renderer/index.html"),
+			protocol: "file:",
+			slashes: true
+		}))
+	}
 
-    mainWindow.on("closed", () => {
-        mainWindow = null
-    })
+	mainWindow.on("closed", () => {
+		mainWindow = null
+	})
 }
 
 !steamTaskRan && app.on("ready", createWindow)
@@ -80,44 +84,48 @@ function createWindow() {
 		}
 
 	})
+console.log("here")
 
-ipcMain.on("requestGetRows", async (event) => {
-	const rows: Row[] = await getRows()
+ipcMain.handle("requestGetRows", async (event, data: GetRowsData) => {
+	const rows: Row[] = await getRows(data.query, data.sort)
 	if (process.env.NODE_ENV === "development") {
 		console.log(`ipcMain||getRows||${rows.length} rows`)
 	}
-	event.reply("responseGetRows", rows)
+	return rows
+	/*event.reply("responseGetRows", rows)*/
 })
-ipcMain.on("requestNewRow", async (event, data: NewRowData) => {
+ipcMain.handle("requestNewRow", async (event, data: NewRowData) => {
 	if (process.env.NODE_ENV === "development") {
 		console.log(`ipcMain||newRow||${JSON.stringify(data, null, 0)}`)
 	}
-	newRow(data).then(async () => {
+	return await newRow(data)/*.then(async () => {
 		event.reply("responseGetRows", await getRows())
-	});
+	});*/
 })
-ipcMain.on("requestDeleteRow", async (event, data: { uuid: number }) => {
+ipcMain.handle("requestDeleteRow", async (event, data: { uuid: number }) => {
 	if (process.env.NODE_ENV === "development") {
 		console.log(`ipcMain||deleteRow||${JSON.stringify(data, null, 0)}`)
 	}
-	event.reply("responseDeleteRow", await deleteRow({ uuid: data.uuid }))
+	return await deleteRow({ uuid: data.uuid })
+	/*event.reply("responseDeleteRow", await deleteRow({ uuid: data.uuid }))*/
 })
-ipcMain.on("requestUpdateRow", async (event, data: { uuid: number, newRowData: NewRowData }) => {
+ipcMain.handle("requestUpdateRow", async (event, data: { uuid: number, newRowData: NewRowData }) => {
 	if (process.env.NODE_ENV === "development") {
 		console.log(`ipcMain||updateRow||${JSON.stringify(data)}`)
 	}
-	event.reply("responseUpdateRow", await updateRow({ uuid: data.uuid, newRowData: data.newRowData }))
+	return await updateRow({ uuid: data.uuid, newRowData: data.newRowData })
+	/*event.reply("responseUpdateRow", await updateRow({ uuid: data.uuid, newRowData: data.newRowData }))*/
 })
 
-ipcMain.on("requestSteamActiveUser", async (event) => {
+ipcMain.handle("requestSteamActiveUser", async (event) => {
 	if (process.env.NODE_ENV === "development") {
 		console.log(`ipcMain||steamActiveUser`)
 	}
-
-	event.reply("responseSteamActiveUser", await getSteamProcess())
+	return await getSteamProcess()
+	/*event.reply("responseSteamActiveUser", await getSteamProcess())*/
 })
 
-ipcMain.on("requestSteamChangeUser", async (event, data: { username: string }) => {
+ipcMain.handle("requestSteamChangeUser", async (event, data: { username: string }) => {
 	if (process.env.NODE_ENV === "development") {
 		console.log(`ipcMain||requestSteamChangeUser`)
 	}
@@ -126,12 +134,21 @@ ipcMain.on("requestSteamChangeUser", async (event, data: { username: string }) =
 		if ((await getSteamProcess()).running) {
 			await shutDownSteam()
 		}
-		event.reply("responseSteamChangeUser", await runasUser(data.username))
+		return await runasUser(data.username)
+		/*event.reply("responseSteamChangeUser", await runasUser(data.username))*/
 	}
 })
-ipcMain.on("requestSteamShutdown", async (event) => {
+ipcMain.handle("requestSteamShutdown", async (event) => {
 	if (process.env.NODE_ENV === "development") {
 		console.log(`ipcMain||requestSteamShutdown`)
 	}
-	event.reply("responseSteamShutdown", await shutDownSteam())
+	return await shutDownSteam()
+	/*event.reply("responseSteamShutdown", await shutDownSteam())*/
+})
+
+ipcMain.handle("requestValidateNewRow", async (event, data: NewRowData) => {
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||requestValidateNewRow`)
+	}
+	return validateNewRow(data)
 })
