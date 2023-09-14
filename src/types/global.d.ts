@@ -1,5 +1,5 @@
 import type React from "react";
-import type { PasswordsComponentProps } from "../components/Apps/Passwords/index1";
+import type { PasswordsComponentProps } from "../components/Apps/Passwords/index";
 import { ValidateError } from "../consts";
 
 export interface IElectronAPI {
@@ -50,6 +50,7 @@ declare global {
         label: string
         component: React.FC<PasswordsComponentProps>
         extraLabel: boolean
+		sidebarBottom?: boolean
     }
     type Data = Row[] | Row
     type NewRowData = {

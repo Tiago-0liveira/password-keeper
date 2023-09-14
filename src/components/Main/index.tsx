@@ -10,7 +10,7 @@ import icons from "../Icons"
 const { BrowserWindow } = remote;
 
 const Main: React.FC = () => {
-	const [activeApp, setActiveApp] = useState(PasswordApp)
+	const [activeApp, setActiveApp] = useState<App>(PasswordApp)
 	const [isSbopen, setisSbopen] = useState(true)
 	const [isMaximized, setisMaximized] = useState<boolean>(BrowserWindow.getFocusedWindow()?.isMaximized() ?? false)
 	const [extraLabel, setExtraLabel] = useState("")
@@ -72,7 +72,7 @@ const Main: React.FC = () => {
 			<div className="content">
 				<div className={clsx("sidebar", !isSbopen && "closed")}>
 					{Apps.map((app, i) => (
-						<div className={clsx("app", app.label === activeApp.label ? "active" : "")} key={i} onClick={setApp(i)}>
+						<div className={clsx("app", app.label === activeApp.label ? "active" : "", app.sidebarBottom && "sidebarBottom")} key={i} onClick={setApp(i)}>
 							<p><b>{app.label}</b></p>
 							{icons.main.sidebarArrow}
 						</div>

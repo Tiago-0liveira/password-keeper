@@ -96,6 +96,8 @@ body {
 			height: calc(100vh - #{$nav-height});
 			width: $sidebar-size;
 			background-color: $side-bar-color;
+			display: flex;
+			flex-direction: column;
 			float:left;
 			position: sticky;
 			bottom: 0;
@@ -114,6 +116,9 @@ body {
 				user-select: none;
 				border-left: 4px solid transparent;
 				transition: 0.3s;
+				&.sidebarBottom {
+					margin-top: auto;
+				}
 				&.active {
 					border-left: 4px solid $green;
 				}
