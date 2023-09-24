@@ -22,22 +22,55 @@ module.exports = {
 			{
 				test: /\.s[ac]ss$/i,
 				use: ["style-loader", "css-loader", "sass-loader"]
-			}
+			},
+			{
+				test: /\.svg$/i,
+				include: rootPath,
+				use: {
+					loader: "svg-url-loader",
+					options: {
+						jsx: true // true outputs JSX tags
+					}
+				}
+			},
+			{
+				test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+				use: [
+				  {
+					loader: 'file-loader',
+					options: {
+					  name: '[name].[ext]',
+					  outputPath: 'fonts/'
+					}
+				  }
+				]
+			  }
 		]
 	},
 	devServer: {
-		contentBase: path.join(rootPath, "dist/renderer"),
-		historyApiFallback: true,
 		compress: true,
 		hot: true,
-		host: "0.0.0.0",
 		port: 4000,
-		publicPath: "/"
+		static: [
+			{
+				directory: path.join(rootPath, "dist/renderer"),
+				publicPath: "/"
+			},
+			{
+				directory: path.join(rootPath, "public"),
+				publicPath: "/"
+			}
+		],
+		watchFiles: ['src/**/*.tsx', 'public/**/*', 'src/**/*.scss', 'src/**/*.ts'],
+		liveReload: true,
+		devMiddleware: {
+			writeToDisk: true
+		}
 	},
 	output: {
 		path: path.resolve(rootPath, "dist/renderer"),
 		filename: "js/[name].js",
-		publicPath: "./"
+		publicPath: "/dist/renderer"
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
