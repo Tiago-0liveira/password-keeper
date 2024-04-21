@@ -8,8 +8,10 @@ module.exports = {
 	resolve: {
 		extensions: [".tsx", ".ts", ".js"]
 	},
-	devtool: "source-map",
-	entry: path.resolve(rootPath, "electron", "main.ts"),
+	entry: {
+		main: path.resolve(rootPath, "electron", "main.ts"),
+		preload: path.resolve(rootPath, "electron", "preload.ts")
+	},
 	target: "electron-main",
 	module: {
 		rules: [
@@ -31,8 +33,8 @@ module.exports = {
 		filename: "[name].js"
 	},
 	plugins: [
-		new CopyPlugin({
+		/*new CopyPlugin({
 			patterns: [{ from: "electron/preload.js", to: "preload.js" }]
-		})
+		})*/
 	]
 }

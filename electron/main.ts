@@ -1,6 +1,7 @@
+/// <reference path="../src/types/global.d.ts" />
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import { app, BrowserWindow, ipcMain } from "electron"
+import { app, BrowserWindow, ipcMain, contextBridge, ipcRenderer } from "electron"
 import * as path from "path"
 import * as url from "url"
 
@@ -8,6 +9,7 @@ import { getRows, deleteRow, newRow, updateRow } from "./database/database";
 import { winUsers, shutDownSteam, getSteamProcess, runasUser } from "./steam"
 import { steamICO } from "./Images";
 import { validateNewRow } from "./helpers";
+import type {IElectronAPI} from "../src/types/global";
 
 let mainWindow: Electron.BrowserWindow | null
 
@@ -52,12 +54,12 @@ function createWindow() {
 		icon: "./build/vault.png",
 		webPreferences: {
 			nodeIntegration: true,
-			//contextIsolation: true,
+			contextIsolation: true,
 			preload: path.join(__dirname, 'preload.js')
 		}
 	})
 
-	if (process.env.NODE_ENV === "development") {
+	if (false && process.env.NODE_ENV === "development") {
 		mainWindow.loadURL("http://localhost:4000")
 	} else {
 		mainWindow.loadURL(url.format({
@@ -75,16 +77,32 @@ function createWindow() {
 !steamTaskRan && app.on("ready", createWindow)
 	.whenReady()
 	.then(() => {
-		if (process.env.NODE_ENV === "development") {
+		/*if (process.env.NODE_ENV === "development") {
 			import("electron-devtools-installer").then(module => {
 				module.default(module.REACT_DEVELOPER_TOOLS)
 					.then((name) => console.log(`Added Extension:  ${name}`))
 					.catch((err) => console.log("An error occurred: ", err))
 			}).catch(console.error)
-		}
-
+		}*/
 	})
-console.log("here")
+
+ipcMain.handle("requestCloseApp", () => {
+	if (mainWindow) {
+		mainWindow.close()
+	}
+})
+
+ipcMain.handle("requestMinimizeApp", () => {
+	if (mainWindow) {
+		mainWindow.minimize()
+	}
+})
+
+ipcMain.handle("requestToggleFullscreenApp", () => {
+	if (mainWindow) {
+		mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize()
+	}
+})
 
 ipcMain.handle("requestGetRows", async (event, data: GetRowsData) => {
 	const rows: Row[] = await getRows(data.query, data.sort)
@@ -102,6 +120,28 @@ ipcMain.handle("requestNewRow", async (event, data: NewRowData) => {
 		event.reply("responseGetRows", await getRows())
 	});*/
 })
+ipcMain.handle("requestValidateAndNewRow", async (event, data: NewRowData) => {
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||validateAndNewRow||${JSON.stringify(data, null, 0)}`)
+	}
+	const opt = validateNewRow(data as Row);
+	if (opt.isValid) {
+		return {isValid: true, value: await newRow(opt.value)}
+	} else {
+		return opt
+	}
+})
+ipcMain.handle("requestValidateAndUpdateRow", async (event, data: Row) => {
+	if (process.env.NODE_ENV === "development") {
+		console.log(`ipcMain||ValidateAndUpdateRow||${JSON.stringify(data, null, 0)}`)
+	}
+	const opt = validateNewRow(data);
+	if (opt.isValid) {
+		return {isValid: true, value: await updateRow(opt.value)}
+	} else {
+		return opt
+	}
+})
 ipcMain.handle("requestDeleteRow", async (event, data: { uuid: number }) => {
 	if (process.env.NODE_ENV === "development") {
 		console.log(`ipcMain||deleteRow||${JSON.stringify(data, null, 0)}`)
@@ -109,11 +149,11 @@ ipcMain.handle("requestDeleteRow", async (event, data: { uuid: number }) => {
 	return await deleteRow({ uuid: data.uuid })
 	/*event.reply("responseDeleteRow", await deleteRow({ uuid: data.uuid }))*/
 })
-ipcMain.handle("requestUpdateRow", async (event, data: { uuid: number, newRowData: NewRowData }) => {
+ipcMain.handle("requestUpdateRow", async (event, row: Row) => {
 	if (process.env.NODE_ENV === "development") {
-		console.log(`ipcMain||updateRow||${JSON.stringify(data)}`)
+		console.log(`ipcMain||updateRow||${JSON.stringify(row)}`)
 	}
-	return await updateRow({ uuid: data.uuid, newRowData: data.newRowData })
+	return await updateRow(row)
 	/*event.reply("responseUpdateRow", await updateRow({ uuid: data.uuid, newRowData: data.newRowData }))*/
 })
 

@@ -6,5 +6,5 @@ prisma/migrations
 prisma/*.db*
 electron/database/generated
 electron/data.json
-db.db
+*.db
 .idea/

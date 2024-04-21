@@ -7,8 +7,12 @@
 	height: $row-height;
 	font-size: 15px;
 	background-color: $row-background;
+	border-right: 3px solid transparent;
 	&:not(:last-child) {
 		border-bottom: 2px solid darken($passwordsComp-bg-color, 10%);
+	}
+	&.isediting {
+		border-right-color: $yellow;
 	}
 	position: relative;
 	transition: background-color 0.1s;
@@ -18,18 +22,24 @@
 	div {
 		display: flex;
 		margin: 3px;
-		border-radius: 4px;
+
 		&:hover:not(:last-child):not([username=""]) {
-			background-color: lighten($color: $row-background, $amount: 10%);
+			background-color: lighten($color: $row-background, $amount: 5%);
 		}
 		&:active:not(:last-child):not([username=""]) {
-			background-color: lighten($color: $row-background, $amount: 13%);
+			background-color: lighten($color: $row-background, $amount: 7%);
 		}
 		&:not(:last-child) {
 			border-right: $gridBorder;
 		}
 		//justify-content: center;
-
+		&:not(:last-child) {
+			border-radius: 4px;
+		}
+		&:last-child {
+			padding-left: 1px transparent;
+			border-left: 1px solid darken($passwordsComp-bg-color, 10%);
+		}
 		span.value {
 			padding-left: 5px;
 			display: flex;
@@ -68,45 +78,56 @@
 			}
 		}
 		&.buttons {
-			padding-right: 5px;
 			display: flex;
 			justify-content: space-around;
 			align-items: center;
 			button {
-				padding: 5px;
 				border: 0;
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				border-radius: 2px;
+				border-radius: 3px;
 				font-size: 11px;
-				&.eye:hover,
-				&.update:hover,
-				&.delete:hover {
-					transform: scale(1.1);
+				background-color: transparent;
+				color: white;
+				padding: 8px;
+				transform: scale(1.05);
+				&:hover {
+					background-color: lighten($color: $row-background, $amount: 5%);
 				}
-				&.eye {
-					background-color: $white-azure;
-					&:hover {
-						background-color: $lavender-gray;
-					}
+				&:active {
+					background-color: lighten($color: $row-background, $amount: 7%);
 				}
 				&.update {
-					background-color: yellow;
-					&:hover {
-						background-color: darken(yellow, 15%);
+					color: $yellow;
+					&.editMode {
+						border: 2px solid $yellow;
 					}
+
 				}
 				&.delete {
-					background-color: $red;
-					&:hover {
-						background-color: darken($red, 15%);
-					}
+					color: $red;
 				}
 				&:focus {
 					outline: none;
 				}
+				&:disabled {
+					opacity: 0.5;
+					cursor: not-allowed;
+				}
 			}
 		}
+	}
+}
+
+@keyframes editingAnim {
+	0% {
+		width: 3%;
+	}
+	50% {
+		width: 15%;
+	}
+	100% {
+		width: 3%;
 	}
 }

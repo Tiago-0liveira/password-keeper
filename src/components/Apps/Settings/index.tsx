@@ -1,5 +1,7 @@
 import React from "react"
 import "./styles.scss"
+import ICONS from "../../Icons"
+//import settingsIcon from "./assets/svg/settings.svg"
 
 const SettingsComponent: React.FC = () => {
 	return (
@@ -14,5 +16,6 @@ const SettingsComponent: React.FC = () => {
 export default {
 	label: "Settings",
 	component: SettingsComponent,
-	extraLabel: false
+	extraLabel: false,
+	sidebarBottom: true
 }

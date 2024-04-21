@@ -2,7 +2,9 @@ import sqlite3 from "sqlite3"
 import { app } from "electron"
 import path from "path"
 
-const dbFilePath = path.join(app.getPath('userData'), "db.db")
+const DEBUG = true
+
+const dbFilePath = DEBUG ? "test.db" : path.join(app.getPath('userData'), "db.db")
 const dbName: string = "passwordVaultV2DB"
 const DB = new sqlite3.Database(dbFilePath)
 const dbParams = "site,email,password,username"
@@ -33,7 +35,10 @@ export const newRow: TnewRow = ({ site, email, password, username }) => {
 	return new Promise((resolve, reject) => {
 		DB.run(`INSERT INTO ${dbName} (${dbParams}) VALUES(?,?,?,?)`, [site, email, password, username], (err) => {
 			if (err) reject(err)
-			resolve()
+			DB.get(`SELECT last_insert_rowid() AS inserted_id, * FROM ${dbName} WHERE uuid = last_insert_rowid()`, (err, row) => {
+				if (err) reject(err);
+				resolve(row)
+			})
 		})
 	})
 }
@@ -42,22 +47,23 @@ export const deleteRow: TDeleteRow = ({ uuid }) => {
 	return new Promise((resolve, reject) => {
 		DB.run(`DELETE FROM ${dbName} WHERE uuid=?`, [uuid], (err) => {
 			if (err) reject(err)
-		})
-		DB.get(`SELECT uuid, ${dbParams} FROM ${dbName} WHERE uuid=?`, [uuid], (err, row: Row) => {
-			if (err) reject(err)
-			resolve(row)
+			DB.get(`SELECT uuid, ${dbParams} FROM ${dbName} WHERE uuid=?`, [uuid], (err, row: Row) => {
+				if (err) reject(err)
+				resolve(row)
+			})
 		})
 	})
 }
 
-export const updateRow: TUpdateRow = ({ uuid, newRowData: { site, email, password, username } }) => {
+export const updateRow: TUpdateRow = ({ uuid, site, email, password, username }) => {
+	console.log({uuid, site, email, password, username})
 	return new Promise((resolve, reject) => {
 		DB.run(`UPDATE ${dbName} SET site=?, email=?, password=?, username=? WHERE uuid=?`, [site, email, password, username, uuid], (err) => {
 			if (err) reject(err)
-		})
-		DB.get(`SELECT uuid, ${dbParams} FROM ${dbName} WHERE uuid=?`, [uuid], (err, row: Row) => {
-			if (err) reject(err)
-			resolve(row)
+			DB.get(`SELECT uuid, ${dbParams} FROM ${dbName} WHERE uuid=?`, [uuid], (err, row: Row) => {
+				if (err) reject(err)
+				resolve(row)
+			})
 		})
 	})
 }

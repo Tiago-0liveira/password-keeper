@@ -2,8 +2,10 @@ import React from "react"
 import "./styles.scss"
 
 import { useState, useEffect } from "react"
-import { ipcRenderer } from "electron"
 import clsx from "clsx"
+import ICONS from "../../Icons"
+//import steamIcon from "/assets/svg/steam.svg"
+import type Electron from "electron"
 
 const winUsers = ["tfgol", "tiago", "tiago_1p3y8sg"]
 
@@ -47,6 +49,7 @@ const SteamManagerComponent: React.FC = () => {
 
 	useEffect(() => {
 		requestSteamActiveUser()
+		/* TODO: what if thge component unmounts and this is still running ? i have to clean it or do something */
 		/*ipcRenderer.send("requestSteamActiveUser")
 		ipcRenderer.on("responseSteamActiveUser", handleResponseSteamActiveUser)
 		ipcRenderer.on("responseSteamChangeUser", handleResponseSteamChangeUser)
@@ -88,4 +91,3 @@ export default {
 	component: SteamManagerComponent,
 	extraLabel: false
 }
-

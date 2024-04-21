@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import RowComponent from "../Row"
-import { ipcRenderer } from "electron"
 
 export interface RowListProps {
 	rows: Row[]

@@ -8,9 +8,24 @@
 		"sourceMap": false,
 		"outDir": "./dist",
 		"strict": true,
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"typeRoots" : ["./src/types"],
+		"moduleResolution": "node",
+		"paths": {
+			"@" : ["./src/"],
+			"components/*": ["./src/components/*"],
+			"apps/*": ["./src/components/Apps/"],
+			"reducers/*": ["./src/reducers/*"],
+			"providers/*": ["./src/providers/*"],
+			"enums": ["./src/enums.ts"],
+			"icons": ["./src/icons/index.tsx"],
+		}
 	},
-	"files": [
-		"src/types/global.d.ts"
+	"include": [
+		"./electron/**/*.ts",
+		"./src/**/*.ts"
+	],
+	"exclude": [
+		"node_modules"
 	]
 }

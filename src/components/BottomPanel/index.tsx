@@ -24,7 +24,7 @@ export enum BottomBarState {
 	Filter
 }
 
-const BottomPanel: React.FC<BottomPanelProps> = ({state, setState, data, ...props}) => {
+const BottomPanel: React.FC<BottomPanelProps> = ({ state, setState, data, ...props }) => {
 	const [closing, setClosing] = useState(false)
 	const [searchOpen, setSearchOpen] = useState(false)
 	const filterRef = useRef<HTMLInputElement>(null)
@@ -54,7 +54,7 @@ const BottomPanel: React.FC<BottomPanelProps> = ({state, setState, data, ...prop
 		})
 	}
 	const onInputChangeTemplate = (s: string) => (e: any) => {
-		props.setData(data => {return { ...data, [s]: e.target.value }})
+		props.setData(data => { return { ...data, [s]: e.target.value } })
 	}
 
 	const buttonCloseClick = () => {

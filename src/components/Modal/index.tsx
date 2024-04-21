@@ -3,7 +3,7 @@ import "./styles.scss"
 import clsx from "clsx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEnvelope, faGlobe, faLock, faEye, faEyeSlash, faUser, faArrowLeft } from "@fortawesome/free-solid-svg-icons"
-import { ipcRenderer } from "electron"
+//import { ipcRenderer } from "electron"
 import Mousetrap from "mousetrap"
 
 export type ModalProps = {
