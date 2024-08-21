@@ -6,11 +6,14 @@ const rootPath = path.resolve(__dirname, "..")
 
 module.exports = {
 	resolve: {
-		extensions: [".tsx", ".ts", ".js"]
+		extensions: [".tsx", ".ts", ".js"],
+		alias: {
+			"@shared": path.resolve(rootPath, "src/shared/"),
+		}
 	},
 	entry: {
-		main: path.resolve(rootPath, "electron", "main.ts"),
-		preload: path.resolve(rootPath, "electron", "preload.ts")
+		main: path.resolve(rootPath, "src", "backend", "main.ts"),
+		preload: path.resolve(rootPath, "src", "backend", "preload.ts")
 	},
 	target: "electron-main",
 	module: {

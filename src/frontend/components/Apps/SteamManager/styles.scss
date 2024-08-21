@@ -1,0 +1,394 @@
+@import "../../../vars";
+
+.SteamManagerComponent {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	background-color: darken($passwordsComp-bg-color, 4%);
+	.apikeys-drawer {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 360px;
+		height: 100%;
+		background-color: $passwordsComp-bg-color;
+		transition: transform ease-out 0.25s;
+		z-index: 3;
+		&.closed {
+			transform: translateX(100%);
+		}
+		.apikeys-header {
+			border-bottom: 2px solid darken($passwordsComp-bg-color, 5%);
+			user-select: none;
+			h3 {
+				font-size: 20px;
+				color: $blue-purple;
+				padding: 12px;
+				margin-left: 10px;
+			}
+		}
+		.apikeys-list {
+			display: flex;
+			height: calc(100% - 48.8px);
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-around;
+			padding-top: 25px;
+			padding-bottom: 35px;
+			.apikey {
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				padding: 15px;
+				border-radius: 5px;
+				//border-left: $viridian-green 3px solid;
+				.apikey-input {
+					border-bottom: 3px solid $green-blue;
+					display: flex;
+					align-items: center;
+					
+					justify-content: space-around;
+					border-radius: 5px 5px 0 0;
+					transition: ease-out 0.2s;
+					&:hover {
+						background-color: darken($passwordsComp-bg-color, 5%);
+					}
+					input {
+						color: $white-azure;
+						width: 92%;
+						font-size: 16px;
+						border: none;
+						outline: none;
+						padding: 5px 0 5px 5px;
+						
+						background-color: transparent;
+					}
+					.icon-check {
+						color: $viridian-green;
+						background-color: transparent;
+						cursor: pointer;
+						padding: 6px;
+						border-radius: 0 5px 0 0;
+					}
+				}
+				.apikey-buttons {
+					display: flex;
+					flex-direction: row;
+					border-radius: 0 0 5px 5px;
+					background-color: darken($passwordsComp-bg-color, 5%);
+					span.button {
+						width: 20%;
+						padding: 6px 8px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						color: $passwordsComp-bg-color;
+						transition: ease-out 0.2s;
+						cursor: pointer;
+						&.delete {
+							border-radius: 0 0 0 5px;
+							color: $red;
+							border-right: 3px solid darken($passwordsComp-bg-color, 3%);
+							&:hover {
+								background-color: lighten($color: $passwordsComp-bg-color, $amount: 1%);
+							}
+							&.disabled {
+								cursor: not-allowed;
+							}
+						}
+						&.message {
+							cursor: default;
+							user-select: none;
+							width: auto;
+							text-align: left;
+							font-size: 15px;
+    						margin-left: 5px;
+						}
+						&.error {
+							color: $red;
+						}
+						&.warning {
+							color: $yellow-orange;
+						}
+						&.info {
+							color: $green-blue;
+						}
+						&.success {
+							color: $viridian-green;
+						}
+					}
+				}
+				&::before {
+					content: "";
+					z-index: 2;
+					position: absolute;
+					left: -4px;
+					width: 4px;
+					height: 40px;
+					border-radius: 5px 0 0 5px;
+					background-color: $red;
+					transition: ease-in 0.2s;
+					transform: translateY(10px);
+				}
+				&.editing::before {
+					background-color: $yellow;
+				}
+				&.checked::before {
+					background-color: $viridian-green;
+				}
+
+			}
+		}
+		/*&:not(.closed) .apikey::before {
+			background-color: transparent;
+		}*/
+	}
+	.titleBar {
+		flex: 0.25;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		user-select: none;
+		.titleWrapper {
+			position: relative;
+			padding: 20px;
+			border-radius: 10px;
+			background-color: darken($passwordsComp-bg-color, 2%);
+			.title {
+				font-size: 28px;
+				color: $blue-purple;
+				display: flex;
+				align-items: center;
+				img {
+					aspect-ratio: auto;
+					width: 30px;
+					margin-right: 10px;
+				}
+				svg {
+					margin-left: 10px;
+					color: $red;
+					&.running {
+						color: $bs-green;
+					}
+				}
+			}
+			.steamStatus {
+				display: flex;
+				align-items: center;
+				
+				font-size: 18px;
+				.status {
+					margin-left: 5px;
+					font-size: 20px;
+					&.running {
+						color: $bs-green;
+					}
+					&:not(.running) {
+						color: $red
+					}
+				}
+			}
+			.button {
+				&.new-account {
+					position: absolute;
+					left: -58px;
+					bottom: 12px;
+					padding: 12px 15px;
+					border-radius: 10px;
+					font-size: 14px;
+					background-color: darken($passwordsComp-bg-color, 2%);
+					&:hover {
+						background-color: darken($passwordsComp-bg-color, 3%);
+					}
+					&:active {
+						background-color: darken($passwordsComp-bg-color, 1%);
+					}
+					svg {
+						color: $viridian-green;
+					}
+				}
+			}
+		}
+		.apikeys-button {
+			position: absolute;
+			padding: 5px;
+			right: 10px;
+			top: 10px;
+			cursor: pointer;
+			transition: ease-in 0.2s;
+			background-color: transparent;
+			border-radius: 5px;
+			z-index: 4;
+			&:hover {
+				background-color: darken($passwordsComp-bg-color, 5%);
+			}
+			.icon-code {
+				color: $red;
+			}
+			&.ok .icon-code {
+				color: $viridian-green;
+			}
+			.icon-exclamation {
+				position: absolute;
+				top: 0;
+				left: 0;
+				color: $yellow;
+			}
+		}
+	}
+	.cards {
+		flex: 0.75;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		
+		& > .sized {
+			display: flex;
+			justify-content: space-evenly;
+			flex-direction: column;
+			align-items: center;
+			position: relative;
+			width: 100%;
+			height: 100%;
+			max-width: 800px;
+			padding-bottom: 10%;
+
+			.accountCard {
+				display: flex;
+				/*justify-content: center;
+				align-items: center;*/
+				width: clamp(400px, 500px, 600px);
+				height: 110px;
+				border-radius: 5px;
+				position: relative;
+				box-shadow: 1px 1px 5px -2px rgba(255, 255, 255, 0.105);
+				z-index: 0;
+				img.avatar {	
+					border-radius: 5px 0 0 5px;
+					aspect-ratio: 1/1;
+					height: 100%;
+					z-index: 1;
+					user-select: none;
+				}
+				span[class$="-name"] {
+					border-radius: inherit;
+					position: absolute;
+					padding: 6px;
+					user-select: none;
+					font-size: 15px;
+					background-color: $SteamAccountCardLabelBackground;
+					z-index: 2;
+					[class$="-icon"] {
+						margin-right: 5px;
+						&.steam-icon {
+							color: $blue-purple
+						}
+					}
+					&.windows-name {
+						right: 0;
+						bottom: 0;
+					}
+					&.steam-name {
+						left: 0;
+						bottom: 0;
+					}
+				}
+				span.option-buttons {
+					display: flex;
+					flex-direction: row;
+					justify-content: center;
+					background-color: $SteamAccountCardLabelBackground;
+					height: fit-content;
+					border-radius: 5px;
+					transform: translate(3px, 3px);
+					> span {
+						padding: 5px 6px;
+						cursor: pointer;
+						&.settings {
+							border-right: 2px solid $passwordsComp-bg-color;
+							.settings-icon {
+								color: $viridian-green;
+							}
+						}
+						&.trash {
+							.trash-icon {
+								color: $red;
+							}
+						}
+					}
+				}
+				span.active {
+					display: flex;
+					justify-content: center;
+					flex-direction: row;
+					position: absolute;
+					right: 3px;
+					top: 3px;
+					user-select: none;
+					span.toggle-button {
+						padding: 6px 6px;
+						border-radius: 5px 0 0 5px;
+						background-color: $SteamAccountCardLabelBackground;
+						cursor: pointer;
+						.icon {
+							margin-right: 5px;
+							&.start {
+								color: $red;
+							}
+							&:not(.start) {
+								color: $viridian-green;
+							}
+						}
+						border-right: 2px solid $passwordsComp-bg-color;
+					}
+					span.label {
+						padding: 5px;
+						border-radius: 0 5px 5px 0;
+						background-color: $SteamAccountCardLabelBackground;
+						.check-icon {
+							color: $viridian-green;
+						}
+						.stop-icon {
+							color: $red;
+						}
+						.spin-icon {
+							color: $yellow;
+						}
+					}
+				}
+				
+				&:not(.active) {
+					background: linear-gradient(to top, 
+						darken($passwordsComp-bg-color, 5%) 0%,
+						darken($passwordsComp-bg-color, 5%) 62%,
+						$red 100%);
+				}
+				&.active {
+					background: linear-gradient(to top, 
+						darken($passwordsComp-bg-color, 5%) 0%,
+						darken($passwordsComp-bg-color, 5%) 62%,
+						$viridian-green 100%);
+				}
+				&.launching {
+					background: linear-gradient(to top, 
+						darken($passwordsComp-bg-color, 5%) 0%,
+						darken($passwordsComp-bg-color, 5%) 62%,
+						$yellow 100%);
+				}
+				
+				/*&.active {
+					background-color: $bs-green;
+				}
+				&:not(.active) {
+					background-color: $smooth-red;	
+				}
+				&.standby {
+				}*/
+				
+			}
+		}
+	}
+}

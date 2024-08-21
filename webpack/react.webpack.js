@@ -1,5 +1,6 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const rootPath = path.resolve(__dirname, "..")
 
@@ -8,16 +9,14 @@ module.exports = {
 		extensions: [".tsx", ".ts", ".js"],
 		mainFields: ["main", "module", "browser"],
 		alias: {
-			"@": path.resolve(rootPath, "src"),
-			"components": path.resolve(rootPath, "src/components"),
-			"apps": path.resolve(rootPath, "src/components"),
-			"reducers": path.resolve(rootPath, "src/reducers"),
-			"providers": path.resolve(rootPath, "src/providers"),
-			"enums": path.resolve(rootPath, "src/enums.ts"),
-			"icons": path.resolve(rootPath, "src/icons/index.tsx"),
+			"@components": path.resolve(rootPath, "src/frontend/components/"),
+			"@apps": path.resolve(rootPath, "src/frontend/components/"),
+			"@reducers": path.resolve(rootPath, "src/frontend/reducers/"),
+			"@providers": path.resolve(rootPath, "src/frontend/providers/"),
+			"@shared": path.resolve(rootPath, "src/shared/"),
 		}
 	},
-	entry: path.resolve(rootPath, "src", "App.tsx"),
+	entry: path.resolve(rootPath, "src", "frontend" ,"App.tsx"),
 	target: "electron-renderer",
 	watch: true,
 	module: {
@@ -59,7 +58,7 @@ module.exports = {
 	},
 	devServer: {
 		compress: true,
-		//hot: true,
+		hot: true,
 		port: 4000,
 		static: [
 			{
@@ -71,7 +70,7 @@ module.exports = {
 				publicPath: "/"
 			}
 		],
-		watchFiles: ['src/**/*.tsx', 'public/**/*', 'src/**/*.scss', 'src/**/*.ts'],
+		watchFiles: ['src/frontend/**/*.tsx', 'public/**/*', 'src/frontend/**/*.scss', 'src/frontend/**/*.ts'],
 		liveReload: true,
 		devMiddleware: {
 			writeToDisk: true
@@ -93,6 +92,14 @@ module.exports = {
 			favicon: "./build/vault.png",
 			alwaysWriteToDisk: true,
 			filename: "index.html",
+		}),
+		new CopyWebpackPlugin({
+			patterns: [
+                {
+                    from: path.resolve(rootPath, "public"),
+                    to: path.resolve(rootPath, "dist/renderer"),
+                },
+            ],
 		})
 	],
 	externals: {

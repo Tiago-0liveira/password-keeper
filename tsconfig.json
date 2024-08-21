@@ -9,20 +9,17 @@
 		"outDir": "./dist",
 		"strict": true,
 		"esModuleInterop": true,
-		"typeRoots" : ["./src/types"],
+		"typeRoots" : ["./src/types/"],
 		"moduleResolution": "node",
 		"paths": {
-			"@" : ["./src/"],
-			"components/*": ["./src/components/*"],
-			"apps/*": ["./src/components/Apps/"],
-			"reducers/*": ["./src/reducers/*"],
-			"providers/*": ["./src/providers/*"],
-			"enums": ["./src/enums.ts"],
-			"icons": ["./src/icons/index.tsx"],
+			"@components/*": ["./src/frontend/components/*"],
+			"@apps/*": ["./src/frontend/components/Apps/"],
+			"@reducers/*": ["./src/frontend/reducers/*"],
+			"@providers/*": ["./src/frontend/providers/*"],
+			"@shared/*": ["./src/shared/*"],
 		}
 	},
 	"include": [
-		"./electron/**/*.ts",
 		"./src/**/*.ts"
 	],
 	"exclude": [

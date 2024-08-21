@@ -1,24 +1,20 @@
 {
 	"name": "PasswordKeeper",
-	"version": "2.1.2",
-	"description": "An Electron boilerplate including TypeScript, React and ESLint.",
+	"version": "2.2.0",
+	"description": "A App to store passwords and to switch steam accounts easily.",
 	"main": "./dist/main.js",
 	"scripts": {
 		"dev": "npm-run-all -p dev:react electron:serve",
 		"dev:electron": "cross-env NODE_ENV=development webpack --config webpack/electron.webpack.js --mode development && npm run start:electron",
 		"dev:react": "cross-env NODE_ENV=development webpack --config webpack/react.webpack.js --mode development",
-		"old:dev:react": "cross-env NODE_ENV=development webpack-dev-server --config webpack/react.webpack.js --mode development",
-		"electron:serve": "wait-on http-get://localhost:4000/ && npm run dev:electron",
+		"dev:sqlite": "sqlite3 ./test.db",
 		"start:electron": "electron .",
 		"build": "cross-env NODE_ENV=production npm-run-all build:electron build:react",
-		"build:run": "cross-env NODE_ENV=production npm-run-all build start:electron",
 		"build:electron": "webpack --mode=production --config webpack/electron.webpack.js",
 		"build:react": "webpack --mode=production --config webpack/react.webpack.js",
 		"package": "npm-run-all build package:dist",
 		"package:dist": "electron-builder --x64",
-		"copyPrismaSchema--not-in-use": "if not exist dist mkdir dist && robocopy prisma dist schema.prisma /NS /NC /NFL /NDL /NJH /NJS",
-		"exe": "\"dist/win-unpacked/PasswordKeeper.exe\"",
-		"format": "prettier-eslint --write \"{,!(node_modules,dist)/**/}*.{js,jsx}\""
+		"exe": "\"dist/win-unpacked/PasswordKeeper.exe\""
 	},
 	"build": {
 		"appId": "Tiago0liveira.PasswordKeeper",
@@ -41,14 +37,14 @@
 			"installerIcon": "build/icon.ico",
 			"uninstallerIcon": "build/icon.ico",
 			"uninstallDisplayName": "PasswordKeeper",
-			"license": "license.txt",
+			"license": "../LICENSE",
 			"oneClick": false,
 			"allowToChangeInstallationDirectory": true
 		}
 	},
 	"keywords": [],
 	"author": "Tiago Oliveira <tfgoliveira@gmail.com>",
-	"license": "MIT",
+	"license": "GPL-3.0-only",
 	"devDependencies": {
 		"@babel/core": "^7.9.0",
 		"@babel/preset-env": "^7.9.5",
@@ -65,6 +61,7 @@
 		"babel-loader": "^8.1.0",
 		"copy-webpack-plugin": "6",
 		"cross-env": "^7.0.2",
+		"electron": "26.3.0",
 		"electron-devtools-installer": "^3.1.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-config-standard": "^14.1.1",
@@ -101,7 +98,6 @@
 		"clsx": "^1.1.1",
 		"core-js": "^3.14.0",
 		"css-loader": "^5.2.6",
-		"electron": "^26.3.0",
 		"mousetrap": "^1.6.5",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
