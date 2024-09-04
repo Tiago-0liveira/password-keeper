@@ -3,7 +3,6 @@ mod database;
 mod handlers;
 
 use tauri::Manager;
-use tauri::path::BaseDirectory;
 use handlers::{
 	password_vault::{
 		password_vault_get_all_rows, password_vault_get_one,
@@ -26,11 +25,6 @@ use handlers::{
 };
 
 use database::database::DB_PATH;
-
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -57,7 +51,6 @@ pub fn run() {
 		})
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
-			greet,
 			/* password_vault handlers */
 			password_vault_get_all_rows, password_vault_get_one, password_vault_delete,
 			password_vault_validate_and_insert, password_vault_update,
