@@ -1,0 +1,36 @@
+{
+  "name": "password-keeper-v3",
+  "private": true,
+  "version": "3.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@tauri-apps/api": ">=2.0.0-rc.0",
+    "@tauri-apps/plugin-shell": ">=2.0.0-rc.0",
+    "clsx": "^2.1.1",
+    "mousetrap": "^1.6.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": ">=2.0.0-rc.0",
+    "@types/mousetrap": "^1.6.15",
+    "@types/node": "^22.5.0",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.2.1",
+    "sass-embedded": "^1.77.8",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
+  }
+}

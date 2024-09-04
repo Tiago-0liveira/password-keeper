@@ -1,0 +1,29 @@
+[package]
+name = "password-keeper-v3"
+version = "0.1.0"
+description = "Password Keeper"
+authors = ["you"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "password_keeper_v3_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[package.metadata.tauri.windows]
+windows_subsystem = "windows"
+
+[build-dependencies]
+tauri-build = { version = "2.0.0-rc", features = [] }
+
+[dependencies]
+tauri = { version = "2.0.0-rc", features = ["default"] }
+tauri-plugin-shell = "2.0.0-rc"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.32.1", features = ["bundled"] }
+lazy_static = "1.5.0"
+reqwest =  { version = "0.12.7", features = ["json", "blocking"] }
+tokio = {version = "1.39.3", features = ["full"] }
+windows = { version = "0.58.0", features = ["Win32_Foundation", "Win32_NetworkManagement_NetManagement", "Win32_Security"] }

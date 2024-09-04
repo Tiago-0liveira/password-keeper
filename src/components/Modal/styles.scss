@@ -1,0 +1,145 @@
+@import "../../vars";
+
+.Modal {
+	position: absolute;
+	/*background-color: $nav-bar-color;*/
+	background-color: rgba(35, 39, 42, 0.95);
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	z-index: -11;
+	transition: ease-out 0.3s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 0;
+	user-select: none;
+	&.open {
+		animation: modal-showup 0.3s ease-out forwards;
+		.modal-content {
+			top: 10%;
+		}
+	}
+	.modal-content {
+		position: absolute;
+		width: 50%;
+		height: 60%;
+		transition: ease-out 0.3s;
+		background-color: $passwordsComp-bg-color;
+		border-radius: 10px;
+		top: -80%;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		.modal-header {
+			flex: 0.2;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.modal-body {
+			flex: 0.8;
+			display: flex;
+			flex-direction: column;
+			.inputs {
+				flex: 0.7;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				margin-top: 20px;
+				.steam-id.input {
+					margin-top: 30px;
+					border-bottom: 2px solid $green-blue;
+					width: 280px;
+					display: flex;
+					align-items: center;
+					.icon.steam {
+						margin: 0 5px;
+					}
+					.icon.check {
+						margin-left: 5px;
+						color: $viridian-green;
+					}
+					input {
+						border: none;
+						outline: none;
+						color: $white-azure;
+						font-size: 15px;
+						padding: 5px;
+						background-color: transparent;
+					}
+				}
+				.select.win-user {
+					width: 280px;
+					margin-top: 30px;
+					border-bottom: 2px solid $green-blue;
+					display: flex;
+					align-items: center;
+					
+					select {
+						border: none;
+						outline: none;
+						background-color: $passwordsComp-bg-color;
+						color: $white-azure;
+						width: 240px;
+						font-size: 15px;
+					}
+					svg {
+						margin: 0px 5px 1px 5px;
+						color: $light-blue;
+					}
+				}
+				.error.message {
+					margin-top: 10px;
+					font-size: 15px;
+					display: flex;
+					align-items: center;
+					padding: 5px;
+					border-radius: 5px;
+					background-color: lighten($color: $passwordsComp-bg-color, $amount: 2%);
+					svg {
+						color: $red;
+						margin-right: 5px;
+					}
+				}
+			}
+			.buttons {
+				flex: 0.3;
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+				margin: 0 20px;
+				.button {
+					padding: 5px;
+					border-radius: 5px;
+					display: flex;
+					align-items: center;
+					cursor: pointer;
+					&.close {
+						background-color: $red;
+					}
+					&.save {
+						background-color: $viridian-green;
+					}
+					svg {
+						margin-left: 5px;
+					}
+				}
+			}
+		}
+	}
+}
+
+@keyframes modal-showup {
+	0% {
+		z-index: -11;
+	}
+	1% {
+		z-index: 11;
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+		z-index: 11;
+	}
+}
