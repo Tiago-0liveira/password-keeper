@@ -4,7 +4,12 @@
 	- Store your loggin credentials 
 	- No need to remember all the different and complex passwords
 	- Do not care if the password is random just store it! 
-	- Switch Steam accounts faster than ever
+	- [WIP] Switch Steam accounts faster than ever (for now, just works on my machine,
+		 though you can change some values in the tauri src to get it to work in your machine)
+
+## | App:
+<img width="1176" height="698" alt="passwordKeeperScreenShot" src="https://github.com/user-attachments/assets/380cb153-fc14-4109-b944-613a9e15c193" />
+
 
 ## | Tecnologies used:
 
