@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import PasswordApp from "../Apps/Passwords/index"
+import {config as PasswordApp} from "../Apps/Passwords/index"
 import Apps from "../Apps"
 import "./styles.scss"
 import clsx from "clsx"

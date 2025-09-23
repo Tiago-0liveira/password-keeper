@@ -349,7 +349,8 @@ const App: React.FC<Appprops> = (props) =>
 		<PasswordsComponent {...props}/>
 	</RowsDataProvider>)
 
-export default {
+export default App
+export const config: App = {
 	label: "Password Vault",
 	component: App,
 	extraLabel: false

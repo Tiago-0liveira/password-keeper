@@ -298,7 +298,8 @@ const WindowsTerminalGeneratorComponent: React.FC<WindowsTerminalGeneratorCompon
 	</div>
 }
 
-export default {
+export default WindowsTerminalGeneratorComponent
+export const config: App = {
 	label: "wt setup generator",
 	component: WindowsTerminalGeneratorComponent,
 	extraLabel: false

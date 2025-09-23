@@ -13,7 +13,8 @@ const SettingsComponent: React.FC = () => {
 }
 
 
-export default {
+export default SettingsComponent
+export const config: App = {
 	label: "Settings",
 	component: SettingsComponent,
 	extraLabel: false,
