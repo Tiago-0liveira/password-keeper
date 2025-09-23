@@ -2,7 +2,6 @@
 
 .PasswordsComponent {
 	height: 100%;
-	background-color: $passwordsComp-bg-color;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -13,10 +12,9 @@
 		width: calc(100%);
         display: grid;
         grid-template-columns: $PasswordGrid;
-		background-color: $row-background;
 		font-size: 20px;
 		height: $RowsHeaderHeight;
-		border-bottom: 2px solid $light-blue;
+		border-bottom: 1px solid $row-background;
 		user-select: none;
         div.Label {
             display: flex;
@@ -34,7 +32,6 @@
 		flex: 1;
 		width: 100%;
 		overflow-y: overlay;
-		background-color: $passwordsComp-bottomBar-bg;
 		&::-webkit-scrollbar {
 			width: 4px;
             position: absolute;
@@ -102,7 +99,6 @@
 		}
 	}
 	.bottomBar {
-		background-color: $passwordsComp-bottomBar-bg;
 		transition: all 0.3s;
 		.top-bar {
 			position: relative;
