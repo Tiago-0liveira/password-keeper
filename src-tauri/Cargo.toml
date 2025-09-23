@@ -27,3 +27,5 @@ lazy_static = "1.5.0"
 reqwest =  { version = "0.12.7", features = ["json", "blocking"] }
 tokio = {version = "1.39.3", features = ["full"] }
 windows = { version = "0.58.0", features = ["Win32_Foundation", "Win32_NetworkManagement_NetManagement", "Win32_Security", "Win32_System", "Win32_System_Diagnostics", "Win32_System_Diagnostics_Debug"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"

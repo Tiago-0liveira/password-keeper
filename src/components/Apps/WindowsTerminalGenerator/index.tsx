@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import "./styles.scss"
 import NavTabComponent, { NavTitleUpdateFunc } from "./components/NavTab"
 import PaneComponent, { IsController, Orientation, PaneController, Terminal } from "./components/Pane"
 import clsx from "clsx"
 import ICONS from "@components/Icons"
 import { generateWindowsTerminalScript } from "@src/utils/windowsTerminalHelpers"
-import { saveFileWithPicker } from "@src/utils/misc"
+import { promptDialogAndSaveCmdFile } from "@src/utils/misc"
 import { updateTerminalFunc } from "./components/Terminal"
 
 export type WindowsTerminalGeneratorComponentProps = {
@@ -180,7 +180,7 @@ const WindowsTerminalGeneratorComponent: React.FC<WindowsTerminalGeneratorCompon
 	const generateScript = useCallback(() => {
 		console.log(state)
 		const wtScriptContent = generateWindowsTerminalScript(state.tabs)
-		saveFileWithPicker(wtScriptContent)
+		promptDialogAndSaveCmdFile("wt-setup", wtScriptContent)
 	}, [state])
 
 
@@ -265,7 +265,7 @@ const WindowsTerminalGeneratorComponent: React.FC<WindowsTerminalGeneratorCompon
 		setState(currState => {
 			return {
 				selectedIdx: currState.selectedIdx,
-				tabs: currState.tabs.map(tab => tab.id === tabId ? {...tab, name: newTitle} : tab)
+				tabs: currState.tabs.map(tab => tab.id === tabId ? { ...tab, name: newTitle } : tab)
 			}
 		})
 	}
@@ -281,7 +281,7 @@ const WindowsTerminalGeneratorComponent: React.FC<WindowsTerminalGeneratorCompon
 					<span>Save Script</span>
 				</div>
 				{state.tabs.map((tab, i) => <NavTabComponent updateTitle={updateNavTitle} disabled={false} selected={i === state.selectedIdx} id={tab.id} name={tab.name} key={i} onClick={clickTab(i)} onDelete={() => deleteTab(tab.id)} onCreate={createTab} />)}
-				<NavTabComponent updateTitle={() => {}} id="" name="" disabled={Boolean(selectedTab)} selected={false} create={true} onClick={createTab} onCreate={() => { }} />
+				<NavTabComponent updateTitle={() => { }} id="" name="" disabled={Boolean(selectedTab)} selected={false} create={true} onClick={createTab} onCreate={() => { }} />
 			</nav>
 			<main className={clsx("tab", { "no-tabs": state.tabs.length === 0 || !selectedTab })}>
 				{selectedTab ?
