@@ -1,28 +1,28 @@
+use crate::database::database::DatabaseModel;
+use crate::database::steam_api_keys::{prepare_keys_for_frontend, SteamApiKey};
+use crate::database::steam_users::SteamUser;
+use serde::{Deserialize, Serialize};
 use std::cmp::PartialEq;
 use std::os::windows::process::CommandExt;
 use std::process::Stdio;
 use std::time::{SystemTime, UNIX_EPOCH};
-use serde::{Deserialize, Serialize};
-use crate::database::database::DatabaseModel;
-use crate::database::steam_api_keys::{SteamApiKey, prepare_keys_for_frontend};
-use crate::database::steam_users::SteamUser;
+use windows::Win32::NetworkManagement::NetManagement::USER_INFO_3;
 use windows::{
+    core::PCWSTR,
     core::PWSTR,
     Win32::Foundation::ERROR_SUCCESS,
     Win32::NetworkManagement::NetManagement::{
-        NetApiBufferFree, NetUserEnum, NET_USER_ENUM_FILTER_FLAGS
+        NetApiBufferFree, NetUserEnum, NET_USER_ENUM_FILTER_FLAGS,
     },
-    Win32::System::Diagnostics::Debug::FORMAT_MESSAGE_FROM_SYSTEM,
     Win32::System::Diagnostics::Debug::FormatMessageW,
-    core::PCWSTR,
+    Win32::System::Diagnostics::Debug::FORMAT_MESSAGE_FROM_SYSTEM,
 };
-use windows::Win32::NetworkManagement::NetManagement::USER_INFO_3;
 /* Exactly equal to the one in the frontend, so it matches */
 #[derive(Deserialize, PartialEq)]
 pub enum SteamUserState {
     Running,
     Stopped,
-    Launching
+    Launching,
 }
 
 impl Serialize for SteamUserState {
@@ -33,7 +33,7 @@ impl Serialize for SteamUserState {
         match self {
             SteamUserState::Running => serializer.serialize_i8(0),
             SteamUserState::Stopped => serializer.serialize_i8(1),
-            SteamUserState::Launching => serializer.serialize_i8(2)
+            SteamUserState::Launching => serializer.serialize_i8(2),
         }
     }
 }
@@ -41,13 +41,13 @@ impl Serialize for SteamUserState {
 #[derive(Deserialize, Serialize)]
 pub struct WindowsUser {
     name: String,
-    in_use: bool
+    in_use: bool,
 }
 
 #[derive(Deserialize, Serialize)]
 pub struct SteamProcess {
     win_username: String,
-    state: SteamUserState
+    state: SteamUserState,
 }
 
 impl SteamProcess {
@@ -59,8 +59,8 @@ impl SteamProcess {
         let output = std::process::Command::new("powershell")
             .arg("-Command")
             .arg(cmd)
-            .stdout(Stdio::piped())  // Capture stdout
-            .stderr(Stdio::null())   // Suppress stderr
+            .stdout(Stdio::piped()) // Capture stdout
+            .stderr(Stdio::null()) // Suppress stderr
             .creation_flags(0x08000000) // CREATE_NO_WINDOW flag
             .output()
             .expect("Failed to execute process");
@@ -69,27 +69,43 @@ impl SteamProcess {
             let stdout = String::from_utf8_lossy(&output.stdout);
             let name = stdout.strip_suffix("\r\n").unwrap_or_default();
             println!("Output:|{}|", name);
-            SteamProcess { win_username: name.to_string(), state: SteamUserState::Running }
-        } else {/* Steam not running */
-            SteamProcess { win_username: String::default(), state: SteamUserState::Stopped }
+            SteamProcess {
+                win_username: name.to_string(),
+                state: SteamUserState::Running,
+            }
+        } else {
+            /* Steam not running */
+            SteamProcess {
+                win_username: String::default(),
+                state: SteamUserState::Stopped,
+            }
         }
     }
     fn launch_as(user: &str) -> SteamProcess {
-        let cmd = format!("runas.exe /user:{} /savecred {}", user, "\"C:\\Program Files (x86)\\Steam\\steam.exe\"");
+        let cmd = format!(
+            "runas.exe /user:{} /savecred {}",
+            user, "\"C:\\Program Files (x86)\\Steam\\steam.exe\""
+        );
         eprintln!("cmd: {}", cmd);
         let output = std::process::Command::new("powershell")
             .arg("-Command")
             .arg(cmd)
-            .stdout(Stdio::piped())  // Capture stdout
-            .stderr(Stdio::null())   // Suppress stderr
+            .stdout(Stdio::piped()) // Capture stdout
+            .stderr(Stdio::null()) // Suppress stderr
             .creation_flags(0x08000000) // CREATE_NO_WINDOW flag
             .output()
             .expect("Failed to execute process");
         eprintln!("output: {:?}", output);
         if output.status.success() {
-            SteamProcess { win_username: user.to_string(), state: SteamUserState::Launching }
+            SteamProcess {
+                win_username: user.to_string(),
+                state: SteamUserState::Launching,
+            }
         } else {
-            SteamProcess { win_username: String::default(), state: SteamUserState::Stopped }
+            SteamProcess {
+                win_username: String::default(),
+                state: SteamUserState::Stopped,
+            }
         }
     }
 }
@@ -98,7 +114,7 @@ impl WindowsUser {
     fn default() -> WindowsUser {
         WindowsUser {
             name: String::new(),
-            in_use: false
+            in_use: false,
         }
     }
     fn get_all() -> Vec<WindowsUser> {
@@ -109,9 +125,9 @@ impl WindowsUser {
 
         unsafe {
             let status = NetUserEnum(
-                PCWSTR::null(),     // Server name
-                3,                        // Level
-                NET_USER_ENUM_FILTER_FLAGS(0),                        // Filter
+                PCWSTR::null(),                // Server name
+                3,                             // Level
+                NET_USER_ENUM_FILTER_FLAGS(0), // Filter
                 &mut p_buffer as *mut _ as *mut _,
                 0xFFFFFFFF,
                 &mut entries_read,
@@ -126,7 +142,7 @@ impl WindowsUser {
                     if user_info.usri3_user_id >= 1000 {
                         users.push(WindowsUser {
                             in_use: false,
-                            name:  user_info.usri3_name.to_string().unwrap()
+                            name: user_info.usri3_name.to_string().unwrap(),
                         });
                     }
                 }
@@ -160,15 +176,17 @@ pub struct SteamInitialLoad {
     users: Vec<SteamUser>,
     active: SteamUser,
     windows_users: Vec<WindowsUser>,
-    api_keys: Vec<SteamApiKey>
+    api_keys: Vec<SteamApiKey>,
 }
 
 impl SteamInitialLoad {
     const FETCH_TIME: i64 = 24 * 60 * 60 * 1000;
     fn empty() -> SteamInitialLoad {
         SteamInitialLoad {
-            users: vec![], active: SteamUser::default(),
-            windows_users: vec![], api_keys: vec![]
+            users: vec![],
+            active: SteamUser::default(),
+            windows_users: vec![],
+            api_keys: vec![],
         }
     }
 }
@@ -185,14 +203,19 @@ pub async fn steam_get_initial_load() -> SteamInitialLoad {
         vec![]
     });
     let mut windows_users = WindowsUser::get_all();
-    let to_fetch_users = steam_users.iter().filter(|user| {
-        if user.last_fetch <= 0 { return true; };
-        let now = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .expect("Time went backwards")
-            .as_millis() as i64;
-        now.saturating_sub(user.last_fetch) >= SteamInitialLoad::FETCH_TIME
-    }).collect::<Vec<&SteamUser>>();
+    let to_fetch_users = steam_users
+        .iter()
+        .filter(|user| {
+            if user.last_fetch <= 0 {
+                return true;
+            };
+            let now = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .expect("Time went backwards")
+                .as_millis() as i64;
+            now.saturating_sub(user.last_fetch) >= SteamInitialLoad::FETCH_TIME
+        })
+        .collect::<Vec<&SteamUser>>();
 
     if to_fetch_users.len() != 0 {
         let steam_user_details = SteamUser::fetch_multiple(&api_keys, &to_fetch_users)
@@ -247,14 +270,13 @@ pub fn steam_launch_as(user: &str) -> SteamProcess {
 
 #[tauri::command]
 pub fn steam_shutdown() {
-	let cmd = r#"taskkill /IM steam.exe /F"#.trim();
-	let _output = std::process::Command::new("cmd")
-		.arg("/C")
-		.arg(cmd)
-		.stdout(Stdio::null())  // Capture stdout
-		.stderr(Stdio::null())   // Suppress stderr
-		.creation_flags(0x08000000) // CREATE_NO_WINDOW flag
-		.output()
-		.expect("Failed to execute process");
-
+    let cmd = r#"taskkill /IM steam.exe /F"#.trim();
+    let _output = std::process::Command::new("cmd")
+        .arg("/C")
+        .arg(cmd)
+        .stdout(Stdio::null()) // Capture stdout
+        .stderr(Stdio::null()) // Suppress stderr
+        .creation_flags(0x08000000) // CREATE_NO_WINDOW flag
+        .output()
+        .expect("Failed to execute process");
 }

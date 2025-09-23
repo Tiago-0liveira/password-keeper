@@ -1,6 +1,6 @@
-use crate::database::{database::DatabaseModel, steam_users::SteamUser, utils::Either};
 use crate::database::steam_api_keys::SteamApiKey;
 use crate::database::steam_users;
+use crate::database::{database::DatabaseModel, steam_users::SteamUser, utils::Either};
 
 #[tauri::command]
 pub fn steam_users_get_all_rows() -> Vec<SteamUser> {
@@ -17,12 +17,14 @@ pub fn steam_users_get_one(uuid: i32) -> Option<SteamUser> {
         Err(err) => {
             eprintln!("err: {}", err);
             None
-        },
+        }
     }
 }
 
 #[tauri::command]
-pub async fn steam_users_validate_and_insert(user: SteamUser) -> Result<SteamUser, steam_users::Error> {
+pub async fn steam_users_validate_and_insert(
+    user: SteamUser,
+) -> Result<SteamUser, steam_users::Error> {
     let mut mut_user = user.clone();
     let api_keys = SteamApiKey::get_all().unwrap_or_else(|err| {
         eprintln!("steam_users_validate_and_insert::error::{}", err);
@@ -35,7 +37,7 @@ pub async fn steam_users_validate_and_insert(user: SteamUser) -> Result<SteamUse
             if details.len() > 0 {
                 mut_user.set_new_detail(&details[0], true);
             }
-        },
+        }
         Err(err) => {
             eprintln!("steam_users_validate_and_insert::error::{:?}", err);
             return Err(steam_users::Error::InvalidSteamId);
@@ -43,18 +45,16 @@ pub async fn steam_users_validate_and_insert(user: SteamUser) -> Result<SteamUse
     }
     match mut_user.force_save() {
         Ok(_) => Ok(mut_user),
-        Err(error) => {
-            match error {
-                Either::Left(err) => {
-                    eprintln!("{:?}", err);
-                    Err(err)
-                },
-                Either::Right(err) => {
-                    eprintln!("{}", err);
-                    Err(steam_users::Error::ErrorMessage(err.to_string()))
-                }
+        Err(error) => match error {
+            Either::Left(err) => {
+                eprintln!("{:?}", err);
+                Err(err)
             }
-        }
+            Either::Right(err) => {
+                eprintln!("{}", err);
+                Err(steam_users::Error::ErrorMessage(err.to_string()))
+            }
+        },
     }
 }
 
@@ -67,18 +67,15 @@ pub fn steam_users_delete(uuid: i32) -> Result<(), steam_users::Error> {
 pub fn steam_users_update(user: SteamUser) -> Result<SteamUser, steam_users::Error> {
     match user.force_update() {
         Ok(_) => Ok(user),
-        Err(error) => {
-            match error {
-                Either::Left(err) => {
-                    eprintln!("{:?}", err);
-                    Err(err)
-                },
-                Either::Right(err) => {
-                    eprintln!("{}", err);
-                    Err(steam_users::Error::ErrorMessage(err.to_string()))
-                }
+        Err(error) => match error {
+            Either::Left(err) => {
+                eprintln!("{:?}", err);
+                Err(err)
             }
-        }
+            Either::Right(err) => {
+                eprintln!("{}", err);
+                Err(steam_users::Error::ErrorMessage(err.to_string()))
+            }
+        },
     }
 }
-

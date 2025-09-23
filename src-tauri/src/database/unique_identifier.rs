@@ -1,9 +1,9 @@
 pub type UniqueIdentifier = i32;
 
 pub trait UniquelyIdentified {
-	const DEFAULT_UUID: UniqueIdentifier = -1;
-	fn set_uuid(&mut self, uuid: i32);
-	fn get_uuid(&self) -> i32;
+    const DEFAULT_UUID: UniqueIdentifier = -1;
+    fn set_uuid(&mut self, uuid: i32);
+    fn get_uuid(&self) -> i32;
 }
 
 #[macro_export]
