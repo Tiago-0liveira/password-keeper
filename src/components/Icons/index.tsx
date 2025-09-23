@@ -3,12 +3,14 @@ import {
     faArrowRight,
     faBars,
     faClipboardList,
+    faCode,
     faExpand,
     faEye,
     faEyeSlash,
     faLock, faLockOpen,
     faMinus,
     faPencilAlt,
+	faPlus,
 	faXmark
 } from "@fortawesome/free-solid-svg-icons"
 import { faSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
@@ -48,6 +50,17 @@ const data = {
 		lock: {
 			closed: <FontAwesomeIcon fixedWidth icon={faLock} size="1x" />,
 			open: <FontAwesomeIcon fixedWidth icon={faLockOpen} size="1x" />,
+		}
+	},
+	wtsetupgen: {
+		code: <FontAwesomeIcon icon={faCode} size="1x" />,
+		tab: {
+			delete: <FontAwesomeIcon icon={faXmark} size="1x" />,
+			create: <FontAwesomeIcon icon={faPlus} size="1x" />
+		},
+		pane: {
+			horizontal: <FontAwesomeIcon icon={faMinus} size="xl" />,
+			vertical: <FontAwesomeIcon icon={faMinus} size="xl" />
 		}
 	}
 }

@@ -13,6 +13,8 @@
 
 ### General
 
+ - [ ] change apps exports architecture
+ - [ ] remove (Ctrl + f) bind in tauri
  - [ ] Make the program launch much faster
  - [x] `Cache system` manage a way to store info or cache the data so we dont have delay when opening a new tab that was already loaded (the delay is extremely small but the user experience is 10x better without it as it will be instant and snappy, this is a must have):
 	- `Fix:` the delay is now gone, the app is snappy and fast as they all load when the app starts and are stored in memory and we just use display none to hide them and show them when needed
@@ -59,6 +61,11 @@
 - [ ] Bottom-bar close on cancel may be a toggle
 - [ ] Button to activate or deactivate the notes feature
 - [ ] Checkbox for autofocus when opening filter tab
+
+### important:
+- [ ] Add on/off switches for tabs on the sidebar
+- [ ] WindowsTerminalGenerator:
+	- [ ] default workingDir
 
 ## Future (further away features to add)
 

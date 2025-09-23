@@ -1,0 +1,74 @@
+@import "../../../vars";
+
+div.windowsTerminalGeneratorTab {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	header {
+		margin: 40px;
+		width: 90%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	main.windows-terminal {
+		width: 90%;
+		height: 80%;
+		display: flex;
+		justify-content: start;
+		align-items: center;
+		flex-direction: column;
+		background-color: $side-bar-color;
+		border-radius: 5px;
+		nav {
+			width: 100%;
+			height: 30px;
+			display: flex;
+			align-items: end;
+			gap: 6px;
+			position: relative;
+			z-index: 1;
+			bottom: -2px;
+
+			div.create-script {
+				display: flex;
+				align-items: center;
+				justify-content: space-evenly;
+				position: relative;
+				background-color: $nav-bar-color;
+				transition: 0.2s ease-out background-color;
+				&:hover {
+					background-color: lighten($nav-bar-color, 10%);
+				}
+				svg {
+					color: $viridian-green;
+				}
+			}
+		}
+
+		main.tab {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: darken($active-app-bg-color, 10%);
+			border-radius: 0 0 5px 5px;
+
+			&.no-tabs {
+				border: 2px solid $side-bar-color;
+			}
+
+			div.no-tabs {
+				font-size: large;
+				svg {
+					color: $viridian-green;
+				}
+			}
+		}
+	}
+}

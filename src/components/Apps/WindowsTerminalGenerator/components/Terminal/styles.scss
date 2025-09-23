@@ -1,0 +1,81 @@
+@import "../../../../../vars";
+
+div.windows-terminal-Terminal {
+	display: flex;
+	position: relative;
+	padding: 5px;
+	flex: 1;
+	border: 2px solid $side-bar-color;
+	color: $modal-background-color;
+	transition: 0.3s ease-out width, height;
+	font-family: "Ubuntu mono" !important;
+	padding-right: 16px;
+	div.terminal-line {
+		display: flex;
+		gap: 2px;
+
+		.line-content {
+			flex: 1;
+			min-width: 0;
+			white-space: pre-wrap; /* preserve spacing + wrap */
+			word-break: break-all; /* wrap at any character */
+			overflow-wrap: anywhere; /* fallback for modern browsers */
+
+			span {
+				display: inline; /* all flow together */
+				min-width: 0;
+				white-space: inherit; /* inherit from .line-content */
+				word-break: inherit;
+				overflow-wrap: inherit;
+
+				&:focus-visible {
+					outline: none;
+				}
+
+				&.cwd {
+					color: white;
+				}
+
+				&:last-child {
+					margin-left: 2px;
+				}
+			}
+		}
+	}
+
+	span.close-button {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+		color: $red;
+	}
+	span.split {
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		gap: 4px;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		padding: 6px;
+		border-radius: 5px;
+		border: 2px solid $passwordsComp-bg-color;
+		span {
+			cursor: pointer;
+			padding: 4px;
+			border-radius: 5px;
+			border: 1px solid transparent;
+			&:hover {
+				border-color: lighten($modal-background-color, 5%);
+			}
+			&.splitV {
+				transform: rotate(90deg);
+			}
+		}
+	}
+}

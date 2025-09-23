@@ -1,0 +1,44 @@
+@import "../../../../../vars";
+
+.windows-terminal-nav-tab {
+	height: 24px;
+	width: 140px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px;
+	border-radius: 5px 5px 0 0;
+	background-color: lighten($side-bar-color, 4%);
+	cursor: pointer;
+
+	&.create {
+		width: 30px;
+		justify-content: center;
+
+		svg {
+			color: $green;
+		}
+	}
+	&.selected {
+		background-color: darken($active-app-bg-color, 10%);
+	}
+
+	svg {
+		cursor: pointer;
+		color: $smooth-red;
+		padding-left: 5px;
+	}
+
+	&:first-child {
+		margin-left: 4px;
+	}
+
+	span.tab-name {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: clip;
+		&:focus-visible {
+			outline: none;
+		}
+	}
+}

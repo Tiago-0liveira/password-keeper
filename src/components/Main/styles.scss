@@ -166,7 +166,7 @@ body {
 			float: left;
 			position: sticky;
 			bottom: 0;
-			transition: 0.3s;
+			transition: 0.3s transform ease-out;
 			&.closed {
 				transform: translateX(-$sidebar-size);
 				/*display: none;*/
@@ -213,7 +213,7 @@ body {
 			position: absolute;
 			height: calc(100vh - #{$nav-height});
 			width: calc(100% - #{$sidebar-size});
-			transition: 0.3s;
+			transition: width 0.3s ease-out;
 			right: 0;
 			&.SbClosed {
 				width: 100%;

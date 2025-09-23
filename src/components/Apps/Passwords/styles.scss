@@ -254,6 +254,7 @@
 			height: 0;
 			transition: all 0.3s;
 			position: relative;
+			border-top: 2px solid transparent;
 			form.new,
 			form.edit,
 			form.filter {
@@ -491,13 +492,13 @@
 		}
 		&:not(.closed) .bottom-bar {
 			height: 140px;
-			border-top: 2px solid $light-blue;
+			border-top-color: $light-blue;
 		}
 		&.closing .bottom-bar {
-			border-top: 2px solid $light-blue;
+			border-top-color: $light-blue;
 		}
 		&.closed .bottom-bar {
-			animation: border-bot 0.3s forwards;
+			animation: border-bot 0.5s forwards;
 		}
 		@keyframes searchInputOpen {
 			0% {
@@ -508,11 +509,11 @@
 			}
 		}
 		@keyframes border-bot {
-			99% {
-				border-top: 2px solid $light-blue;
+			0% {
+				border-top-color: $light-blue;
 			}
 			100% {
-				border-top: 2px solid transparent;
+				border-top-color: transparent;
 			}
 		}
 	}

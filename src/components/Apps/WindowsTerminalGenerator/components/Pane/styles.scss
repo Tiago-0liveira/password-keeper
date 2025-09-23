@@ -1,0 +1,14 @@
+@import "../../../../../vars";
+
+.windows-terminal-Pane {
+	display: flex;
+	flex: 1;
+	height: 100%;
+	&.h {
+		flex-direction: column;
+	}
+	&.v {
+		flex-direction: row;
+		width: 100%;
+	}
+}
