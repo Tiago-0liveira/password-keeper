@@ -145,8 +145,13 @@ const WindowsTerminalGeneratorComponent: React.FC<WindowsTerminalGeneratorCompon
 	const selectedTab = useMemo(() => state.tabs[state.selectedIdx], [state])
 
 	const clickTab = useCallback(
-		(i: number) => () => { setState((currState) => { return { ...currState, selectedIdx: i } }) },
-		[],
+		(i: number) => () => {
+			if (state.selectedIdx !== i)
+			{
+				setState((currState) => { return { ...currState, selectedIdx: i } })
+			}
+		},
+		[state],
 	)
 
 	const createTab = useCallback(() => {
