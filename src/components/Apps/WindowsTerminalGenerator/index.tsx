@@ -7,6 +7,7 @@ import ICONS from "@components/Icons"
 import { generateWindowsTerminalScript } from "@src/utils/windowsTerminalHelpers"
 import { promptDialogAndSaveCmdFile } from "@src/utils/misc"
 import { updateTerminalFunc } from "./components/Terminal"
+import React from "react"
 
 export type WindowsTerminalGeneratorComponentProps = {
 
@@ -301,6 +302,6 @@ const WindowsTerminalGeneratorComponent: React.FC<WindowsTerminalGeneratorCompon
 export default WindowsTerminalGeneratorComponent
 export const config: App = {
 	label: "wt setup generator",
-	component: WindowsTerminalGeneratorComponent,
+	component: React.memo(WindowsTerminalGeneratorComponent),
 	extraLabel: false
 }

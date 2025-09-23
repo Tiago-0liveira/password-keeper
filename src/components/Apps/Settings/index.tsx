@@ -16,7 +16,7 @@ const SettingsComponent: React.FC = () => {
 export default SettingsComponent
 export const config: App = {
 	label: "Settings",
-	component: SettingsComponent,
+	component: React.memo(SettingsComponent),
 	extraLabel: false,
 	sidebarBottom: true
 }

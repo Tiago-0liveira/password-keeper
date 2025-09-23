@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import "./styles.scss"
 import ICONS from "@components/Icons"
+import React from "react"
 
 export type NavTitleUpdateFunc = (tabId: string, newTitle: string) => void
 
@@ -49,4 +50,4 @@ const NavTabComponent: React.FC<NavTabComponentProps> = ({ name, create, selecte
 	)
 }
 
-export default NavTabComponent
+export default React.memo(NavTabComponent)

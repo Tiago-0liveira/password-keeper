@@ -29,22 +29,22 @@ export type PasswordsComponentProps = {
 }
 
 const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
-	const {data: state, dispatch} = useContext<RowsContextT>(RowsContext);
+	const { data: state, dispatch } = useContext<RowsContextT>(RowsContext);
 	const [isPassHidden, setIsPassHidden] = useState(true)
-	const canEditRef = useRef({value: true})
+	const canEditRef = useRef({ value: true })
 	const formRef = useRef<HTMLFormElement>(null)
 
 	const handleCtrlC = () => {
 		buttonCloseClick()
 	}
 	const handleCtrlF = () => {
-		dispatch({type: PasswordsAppActionType.BB_TOGGLE_FILTER})
+		dispatch({ type: PasswordsAppActionType.BB_TOGGLE_FILTER })
 	}
 	const handleCtrlE = () => {
-		dispatch({type: PasswordsAppActionType.BB_TOGGLE_EDIT})
+		dispatch({ type: PasswordsAppActionType.BB_TOGGLE_EDIT })
 	}
 	const handleCtrlN = () => {
-		dispatch({type: PasswordsAppActionType.BB_TOGGLE_NEW})
+		dispatch({ type: PasswordsAppActionType.BB_TOGGLE_NEW })
 	}
 
 	const fetchRows = () => {
@@ -93,7 +93,7 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 				if (formData.get("password")) data.password = formData.get("password")?.toString() || ""
 				if (state.bottomBar.data.new != data) {
 					if (flag_dispatch)
-						dispatch({type: PasswordsAppActionType.UPDATE_NEW_DATA, data})
+						dispatch({ type: PasswordsAppActionType.UPDATE_NEW_DATA, data })
 					else
 						return data
 				}
@@ -106,9 +106,9 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 				if (formData.get("password")) data.password = formData.get("password")?.toString() || ""
 				if (state.bottomBar.data.edit.row != data) {
 					if (flag_dispatch)
-						dispatch({type: PasswordsAppActionType.UPDATE_EDIT_DATA, data: {uuid: state.bottomBar.data.edit.row?.uuid, ...data}})
+						dispatch({ type: PasswordsAppActionType.UPDATE_EDIT_DATA, data: { uuid: state.bottomBar.data.edit.row?.uuid, ...data } })
 					else
-						return {uuid: state.bottomBar.data.edit.row?.uuid, ...data}
+						return { uuid: state.bottomBar.data.edit.row?.uuid, ...data }
 				}
 				break;
 			}
@@ -120,25 +120,25 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 	}
 	const buttonSaveClick = () => {
 		let data = saveInputData(false)
-	
+
 		switch (state.bottomBar.state) {
 			case EBottomBarState.New:
 				insertOne(state.bottomBar.data.new)
 					.then(user => {
-						dispatch({type: PasswordsAppActionType.NEW, data: user as Row})
+						dispatch({ type: PasswordsAppActionType.NEW, data: user as Row })
 					})
 					.catch(err => {
-						dispatch({type: PasswordsAppActionType.SET_ERROR, data: err})
+						dispatch({ type: PasswordsAppActionType.SET_ERROR, data: err })
 						console.error(err)
 					})
 				break;
 			case EBottomBarState.Edit:
 				updateRow(data as Row).then((user) => {
 					state.bottomBar.data.edit?.cancelCallback()
-					dispatch({type: PasswordsAppActionType.EDIT, data: user as Row})
+					dispatch({ type: PasswordsAppActionType.EDIT, data: user as Row })
 				}).catch(err => {
 					console.error(err)
-					dispatch({type: PasswordsAppActionType.SET_ERROR, data: err})
+					dispatch({ type: PasswordsAppActionType.SET_ERROR, data: err })
 				})
 				break;
 		}
@@ -147,23 +147,23 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 		resetInputsValue()
 		switch (state.bottomBar.state) {
 			case EBottomBarState.New:
-				dispatch({type: PasswordsAppActionType.UPDATE_NEW_DATA, data: {site:"", username:"", password:"", email:""}})
+				dispatch({ type: PasswordsAppActionType.UPDATE_NEW_DATA, data: { site: "", username: "", password: "", email: "" } })
 				break;
 			case EBottomBarState.Edit:
 				state.bottomBar.data.edit?.cancelCallback()
-				dispatch({type: PasswordsAppActionType.UPDATE_EDIT_DATA, data: {uuid: -1, site:"", username:"", password:"", email:""}})
+				dispatch({ type: PasswordsAppActionType.UPDATE_EDIT_DATA, data: { uuid: -1, site: "", username: "", password: "", email: "" } })
 				break;
 		}
 	}
 	const buttonResetClick = () => {
 		if (state.filter == rowsDataDefault.filter) return
-		dispatch({type: PasswordsAppActionType.FILTER_RESET})
+		dispatch({ type: PasswordsAppActionType.FILTER_RESET })
 	}
 	const onFilterInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		dispatch({type: PasswordsAppActionType.FILTER_SEARCH_UPDATE, data: event.target.value})
+		dispatch({ type: PasswordsAppActionType.FILTER_SEARCH_UPDATE, data: event.target.value })
 	}
 	const onFilterCheckBoxChange = (propName: string) => (_event: React.MouseEvent<HTMLDivElement>) => {
-		let updatedFilter: FilterObject = {...state.filter.options}
+		let updatedFilter: FilterObject = { ...state.filter.options }
 		switch (propName) {
 			case "site":
 				updatedFilter.site = !updatedFilter.site
@@ -185,7 +185,7 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 				break;
 		}
 
-		dispatch({type: PasswordsAppActionType.FILTER_CHECKBOXES_UPDATE, data: updatedFilter})
+		dispatch({ type: PasswordsAppActionType.FILTER_CHECKBOXES_UPDATE, data: updatedFilter })
 	}
 	const getBottomBarClassName = () => {
 		switch (state.bottomBar.state) {
@@ -205,8 +205,7 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 
 	const bottomBarContent = () => {
 		let element = <></>
-		if (state.bottomBar.state === EBottomBarState.Filter)
-		{
+		if (state.bottomBar.state === EBottomBarState.Filter) {
 			element = <>
 				<div className="Filter">
 					<div className="input">
@@ -216,39 +215,38 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 						</span>
 					</div>
 					<div className="checkbox" onClick={onFilterCheckBoxChange("active")}>
-						<FontAwesomeIcon icon={state.filter.options.active ? faSquareCheck : faSquare} size="lg" color={"#0E9594"}/>
+						<FontAwesomeIcon icon={state.filter.options.active ? faSquareCheck : faSquare} size="lg" color={"#0E9594"} />
 						<label>Filter</label>
 					</div>
 					<div className="checkbox" onClick={onFilterCheckBoxChange("matchcase")}>
-						<FontAwesomeIcon icon={state.filter.options.matchcase ? faSquareCheck : faSquare} size="lg" color={"#0E9594"}/>
+						<FontAwesomeIcon icon={state.filter.options.matchcase ? faSquareCheck : faSquare} size="lg" color={"#0E9594"} />
 						<label htmlFor="matchcase">Case Sensitive</label>
 					</div>
 				</div>
 				<div className="checkboxes">
 					<div className="checkbox" onClick={onFilterCheckBoxChange("site")}>
-						<FontAwesomeIcon icon={state.filter.options.site ? faSquareCheck : faSquare} size="lg" color={"#0E9594"}/>
+						<FontAwesomeIcon icon={state.filter.options.site ? faSquareCheck : faSquare} size="lg" color={"#0E9594"} />
 						<label htmlFor="site">Site</label>
 					</div>
 					<div className="checkbox" onClick={onFilterCheckBoxChange("email")}>
-						<FontAwesomeIcon icon={state.filter.options.email ? faSquareCheck : faSquare} size="lg" color={"#0E9594"}/>
+						<FontAwesomeIcon icon={state.filter.options.email ? faSquareCheck : faSquare} size="lg" color={"#0E9594"} />
 						<label htmlFor="email">Email</label>
 					</div>
 					<div className="checkbox" onClick={onFilterCheckBoxChange("username")}>
-						<FontAwesomeIcon icon={state.filter.options.username ? faSquareCheck : faSquare} size="lg" color={"#0E9594"}/>
+						<FontAwesomeIcon icon={state.filter.options.username ? faSquareCheck : faSquare} size="lg" color={"#0E9594"} />
 						<label htmlFor="username">Username</label>
 					</div>
 				</div>
 			</>
 		}
-		else if (state.bottomBar.state === EBottomBarState.New || state.bottomBar.state === EBottomBarState.Edit)
-		{
+		else if (state.bottomBar.state === EBottomBarState.New || state.bottomBar.state === EBottomBarState.Edit) {
 			if (state.bottomBar.state === EBottomBarState.Edit && state.bottomBar.data.edit.row?.uuid === undefined)
 				element = <>
 					<div className="NoRowSelected">
 						<p>No Row selected!</p>
 					</div>
 				</>
-			else 
+			else
 				element = <>
 					{element}
 					<div className={clsx("input")}>
@@ -301,7 +299,7 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 						</span>
 					</>
 				}
-				{(state.bottomBar.state === EBottomBarState.Filter) && 
+				{(state.bottomBar.state === EBottomBarState.Filter) &&
 					(<span className="button erase" onClick={buttonResetClick}>
 						<span>Reset</span>
 						<FontAwesomeIcon icon={faEraser} size="1x" />
@@ -314,8 +312,8 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 
 	return (
 		<div className="PasswordsComponent">
-			<PasswordsList rows={state.rows} filter={state.filter} dispatch={dispatch} canEditRef={canEditRef}/>
-			<div className={clsx("bottomBar", { "closed": EBottomBarState.Closed ===  state.bottomBar.state})}>
+			<PasswordsList rows={state.rows} filter={state.filter} dispatch={dispatch} canEditRef={canEditRef} />
+			<div className={clsx("bottomBar", { "closed": EBottomBarState.Closed === state.bottomBar.state })}>
 				<div className="top-bar">
 					<div className="button newButton" onClick={OpenBottomBar(PasswordsAppActionType.BB_OPEN_NEW)}>
 						<span className="label">New</span> <FontAwesomeIcon icon={faPlus} size="sm" />
@@ -333,21 +331,22 @@ const PasswordsComponent: React.FC<PasswordsComponentProps> = () => {
 				</div>
 
 				<div className={clsx("bottom-bar")}>
-					{bottomBarisOpen() && 
-					<form ref={formRef} className={getBottomBarClassName()} onSubmit={(e) => {e.preventDefault();console.log("submitted")}}>
-						{bottomBarContent()}
-					</form>}
+					{bottomBarisOpen() &&
+						<form ref={formRef} className={getBottomBarClassName()} onSubmit={(e) => { e.preventDefault(); console.log("submitted") }}>
+							{bottomBarContent()}
+						</form>}
 				</div>
 			</div>
 		</div>
 	)
 }
 
-interface Appprops extends PasswordsComponentProps {}
-const App: React.FC<Appprops> = (props) =>
-	(<RowsDataProvider>
-		<PasswordsComponent {...props}/>
-	</RowsDataProvider>)
+interface Appprops extends PasswordsComponentProps { }
+const App: React.FC<Appprops> = React.memo((props) =>
+	<RowsDataProvider>
+		<PasswordsComponent {...props} />
+	</RowsDataProvider>
+)
 
 export default App
 export const config: App = {

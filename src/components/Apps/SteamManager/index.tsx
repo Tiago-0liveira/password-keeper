@@ -207,6 +207,6 @@ const SteamManagerComponent: React.FC = () => {
 export default SteamManagerComponent
 export const config: App = {
 	label: "Steam Manager",
-	component: SteamManagerComponent,
+	component: React.memo(SteamManagerComponent),
 	extraLabel: false
 }

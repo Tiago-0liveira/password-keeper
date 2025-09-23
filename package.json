@@ -22,7 +22,8 @@
     "clsx": "^2.1.1",
     "mousetrap": "^1.6.5",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-scan": "^0.4.3"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.8.4",

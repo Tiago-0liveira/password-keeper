@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import "./styles.scss"
 import TerminalComponent, { updateTerminalFunc } from "../Terminal";
+import React from "react";
 
 export type Terminal = {
 	workingDir?: string;
@@ -40,4 +41,4 @@ const PaneComponent: React.FC<PaneComponentProps> = (props) => {
 	)
 }
 
-export default PaneComponent
+export default React.memo(PaneComponent)

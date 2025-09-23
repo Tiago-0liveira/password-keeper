@@ -2,6 +2,7 @@ import clsx from "clsx"
 import "./styles.scss"
 import { Orientation, Terminal } from "../Pane"
 import ICONS from "@components/Icons"
+import React from "react"
 
 export type updateTerminalFunc = (terminalId: string, terminalArgs: Omit<Terminal, "id">) => void
 
@@ -48,4 +49,4 @@ const TerminalComponent: React.FC<TerminalComponentProps> = (props) => {
 	)
 }
 
-export default TerminalComponent
+export default React.memo(TerminalComponent)
