@@ -68,7 +68,6 @@ impl SteamProcess {
             // Convert the output to a string and print it
             let stdout = String::from_utf8_lossy(&output.stdout);
             let name = stdout.strip_suffix("\r\n").unwrap_or_default();
-            println!("Output:|{}|", name);
             SteamProcess {
                 win_username: name.to_string(),
                 state: SteamUserState::Running,
