@@ -28,3 +28,4 @@ dist-ssr
 *.db
 .tauri*
 .env
+latest.json

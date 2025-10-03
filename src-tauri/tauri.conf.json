@@ -1,7 +1,7 @@
 {
-	"productName": "password-keeper-v3",
-	"version": "0.1.0",
-	"identifier": "com.password-keeper-v3.app",
+	"productName": "password-keeper",
+	"version": "3.1.1",
+	"identifier": "com.password-keeper.app",
 	"build": {
 		"beforeDevCommand": "pnpm dev",
 		"devUrl": "http://localhost:1420",
