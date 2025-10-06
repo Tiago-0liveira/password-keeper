@@ -1,5 +1,3 @@
-@import "../../../vars";
-
 div.windowsTerminalGeneratorTab {
 	width: 100%;
 	height: 100%;
@@ -42,7 +40,7 @@ div.windowsTerminalGeneratorTab {
 				background-color: $nav-bar-color;
 				transition: 0.2s ease-out background-color;
 				&:hover {
-					background-color: lighten($nav-bar-color, 10%);
+					background-color: color.adjust($color: $nav-bar-color,$lightness: 10%);
 				}
 				svg {
 					color: $viridian-green;
@@ -56,7 +54,7 @@ div.windowsTerminalGeneratorTab {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			background-color: darken($active-app-bg-color, 10%);
+			background-color: color.adjust($color: $active-app-bg-color,$lightness: -10%);
 			border-radius: 0 0 5px 5px;
 
 			&.no-tabs {

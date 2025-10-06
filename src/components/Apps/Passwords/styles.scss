@@ -1,5 +1,3 @@
-@import "../../../vars";
-
 .PasswordsComponent {
 	height: 100%;
 	width: 100%;
@@ -10,38 +8,37 @@
 		flex: 0 0 $RowsHeaderHeight;
 		position: sticky;
 		width: calc(100%);
-        display: grid;
-        grid-template-columns: $PasswordGrid;
+		display: grid;
+		grid-template-columns: $PasswordGrid;
 		font-size: 20px;
 		height: $RowsHeaderHeight;
 		border-bottom: 1px solid $row-background;
 		user-select: none;
-        div.Label {
-            display: flex;
-            //justify-content: center;
-			padding-left: 10px;	 
+		div.Label {
+			display: flex;
+			padding-left: 10px;
 			letter-spacing: 0.4px;
-            align-items: center;
-            &:not(:last-child) {
-              border-right: $gridBorder;
-            }
-        }
+			align-items: center;
+			&:not(:last-child) {
+				border-right: $gridBorder;
+			}
+		}
 	}
 
-	.Rows, .Cards {
+	.Rows,
+	.Cards {
 		flex: 1;
 		width: 100%;
 		overflow-y: overlay;
 		&::-webkit-scrollbar {
 			width: 4px;
-            position: absolute;
+			position: absolute;
 			background-color: transparent;
 		}
 		&::-webkit-scrollbar-thumb {
 			border-radius: 2px;
 			background-color: $light-blue;
-			//transition: all 0.2s;
-            position: absolute;
+			position: absolute;
 			&:active {
 				background-color: $smooth-blue;
 			}
@@ -53,36 +50,6 @@
 		align-items: center;
 		justify-content: center;
 	}
-	/*.newButton {
-		position: absolute;
-		top: 5px;
-		left: 5px;
-		border-radius: 2px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background-color: $light-green;
-		padding: 4px;
-		&:hover {
-			background-color: $bs-green;
-		}
-	}
-	.searchButton {
-		position: absolute;
-		top: 5px;
-		left: 35px;
-		color:black;
-		border-radius: 2px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background-color: $yellow;
-		padding: 4px;
-		&:hover {
-			background-color: $yellow-orange;
-		}
-		z-index: 1;
-	}*/
 	.clearSearchFilterButton {
 		position: absolute;
 		top: 5px;
@@ -92,10 +59,10 @@
 		justify-content: flex-end;
 		align-items: center;
 		color: $red;
-		background-color: darken($color: $passwordsComp-bg-color, $amount: 5%);
+		background-color: color.adjust($color: $passwordsComp-bg-color,$lightness: -5%);
 		padding: 4px 4px 4px 20px;
 		&:hover {
-			background-color: lighten($color: $passwordsComp-bg-color, $amount: 5%);
+			background-color: color.adjust($color: $passwordsComp-bg-color,$lightness: 5%);
 		}
 	}
 	.bottomBar {
@@ -108,7 +75,6 @@
 			display: flex;
 			align-items: center;
 			justify-content: flex-start;
-			//gap: 10px;
 			font-size: 21px;
 			border-top: 2px solid $light-blue;
 			user-select: none;
@@ -138,10 +104,10 @@
 				align-items: center;
 				background-color: $viridian-green;
 				&:hover {
-					background-color: darken($viridian-green, 5);
+					background-color: color.adjust($color: $viridian-green,$lightness: -5%);
 				}
 				&:active {
-					background-color: lighten($viridian-green, 5);
+					background-color: color.adjust($color: $viridian-green,$lightness: 5%);
 				}
 			}
 			> .editButton {
@@ -150,58 +116,14 @@
 				align-items: center;
 				background-color: $yellow;
 				&:hover {
-					background-color: darken($yellow, 5);
+					background-color: color.adjust($color: $yellow,$lightness: -5%);
 				}
 				&:active {
-					background-color: lighten($yellow, 5);
+					background-color: color.adjust($color: $yellow,$lightness: 5%);
 				}
 			}
-			/*> .searchButton {
-				//margin-left: 10px;
-				position: relative;
-				color: black;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				background-color: darken($blue-purple, 5);
-				transition: width 0.3s;
-				&:hover {
-					background-color: $blue-purple;
-				}
-				span.label.displayNone {
-					display: none;
-				}
 
-				input {
-					background-color: transparent;
-					border: none;
-					border-bottom: 1px solid black;
-					font-size: 16px;
-					margin: 3px 8px;
-					transition: width 0.3s;
-					animation: searchInputOpen 0.3s forwards;
-					&.displayNone {
-						width: 35px;
-						animation: searchInputClose 0.3s forwards;
-						display: none;
-					}
-					&:focus {
-						outline: none;
-					}
-				}
-				> span.close {
-					padding: 0 5px;
-					&:hover svg {
-						color: $red;
-					}
-					&.displayNone {
-						display: none;
-					}
-				}
-				z-index: 1;
-			}*/
 			> .filterButton {
-				//margin-left: 10px;
 				position: relative;
 				color: black;
 				display: flex;
@@ -213,7 +135,7 @@
 					background-color: $white-azure;
 				}
 				&:active {
-					background-color: darken($lavender-gray, 5);
+					background-color: color.adjust($color: $lavender-gray,$lightness: -5%);
 				}
 			}
 			> .error {
@@ -228,23 +150,6 @@
 					margin-right: 8px;
 				}
 			}
-
-			/*> .filterToggle {
-				//margin-left: 10px;
-				position: relative;
-				color: black;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				background-color: $lavender-gray;
-				&:hover {
-					background-color: $white-azure;
-				}
-				&:active {
-					background-color: darken($lavender-gray, 5);
-				}
-				z-index: 1;
-			}*/
 		}
 		.bottom-bar {
 			height: 0;
@@ -275,7 +180,7 @@
 						border-bottom: 2px solid $viridian-green;
 						&:focus-within:not(.error) {
 							border-bottom: 2px solid $blue-purple;
-							label svg{
+							label svg {
 								color: $blue-purple;
 							}
 						}
@@ -318,7 +223,6 @@
 									&:hover {
 										color: $viridian-green;
 									}
-
 								}
 							}
 							&.open {
@@ -351,9 +255,7 @@
 					justify-content: space-evenly;
 					flex-direction: column;
 					align-items: center;
-					
-					/*width: 78px;
-					height: 26px;*/
+
 					span.button {
 						padding: 4px;
 						border-radius: 3px;
@@ -380,47 +282,27 @@
 						}
 						&.close {
 							background-color: $red;
-							&:hover {
-								//background-color: lighten($red, 5%);
-							}
 						}
 						&.save {
 							background-color: $viridian-green;
-							&:hover {
-								//background-color: lighten($viridian-green, 5%);
-							}
 						}
 						&.erase {
 							background-color: $yellow-orange;
-							&:hover {
-								//background-color: lighten($yellow-orange, 5%);
-							}
 						}
 					}
 				}
 			}
-			form.new, form.edit, form.filter {
+			form.new,
+			form.edit,
+			form.filter {
 				grid-template-rows: 5% repeat(4, 22.5%) 5%;
 				div.buttonwrappers {
-					/*width: 70px;
-					height: 100%;*/
-					grid-row: 2/ span 4;
+					grid-row: 2 / span 4;
 					grid-column: 5;
-					/*&.close {
-						grid-row: 2/4;
-						grid-column: 5;
-					}
-					&.erase {
-						grid-row: 3/5;
-						grid-column: 5;
-					}
-					&.save {
-						grid-row: 4/6;
-						grid-column: 5;
-					}*/
 				}
 			}
-			form.edit, form.filter {
+			form.edit,
+			form.filter {
 				div.NoRowSelected {
 					display: flex;
 					justify-content: center;
@@ -440,7 +322,7 @@
 						width: 65%;
 						margin-left: 15px;
 						margin-bottom: 10px;
-						
+
 						span.inputWrapper {
 							display: flex;
 							justify-content: unset;
@@ -467,24 +349,6 @@
 					}
 				}
 			}
-			/*form.edit {
-				//grid-template-rows: 6% repeat(3, 29.33%) 6%;
-				grid-template-rows: 5% repeat(4, 22.5%) 5%;
-				span.buttonwrapper {
-					&.close {
-						grid-row: 2/4;
-						grid-column: 5;
-					}
-					&.erase {
-						grid-row: 3/5;
-						grid-column: 5;
-					}
-					&.save {
-						grid-row: 4/6;
-						grid-column: 5;
-					}
-				}
-			}*/
 		}
 		&:not(.closed) .bottom-bar {
 			height: 140px;
@@ -513,6 +377,4 @@
 			}
 		}
 	}
-
-
 }

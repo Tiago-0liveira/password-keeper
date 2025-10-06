@@ -1,5 +1,3 @@
-@import "../../vars";
-
 @font-face {
 	font-family: "Ubuntu"; // Replace with your desired font name
 	src: url("../../fonts/Ubuntu-Regular.ttf") format("truetype");
@@ -168,7 +166,6 @@ body {
 			transition: 0.22s transform ease-out;
 			&.closed {
 				transform: translateX(-$sidebar-size);
-				/*display: none;*/
 			}
 			> div.bottom {
 				margin-top: auto;
