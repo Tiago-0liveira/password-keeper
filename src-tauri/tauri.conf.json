@@ -1,6 +1,6 @@
 {
 	"productName": "password-keeper",
-	"version": "3.1.1",
+	"version": "3.1.2",
 	"identifier": "com.password-keeper.app",
 	"build": {
 		"beforeDevCommand": "pnpm dev",

@@ -38,7 +38,7 @@ with open(sig_path, "r", encoding="utf-8") as f:
 
 # Build download URL (GitHub release "latest" tag)
 REPO_URL = "https://github.com/Tiago-0liveira/password-keeper"
-url = f"{REPO_URL}/releases/download/latest/{exe_name}"
+url = f"{REPO_URL}/releases/download/v{VERSION}/{exe_name}"
 
 # Create latest.json structure
 latest = {
@@ -46,7 +46,7 @@ latest = {
     "notes": notes,
     "pub_date": datetime.now(timezone.utc).isoformat(),
     "platforms": {
-        "windows": {
+        "windows-x86_64": {
             "arch": "x64",
             "url": url,
             "signature": signature
