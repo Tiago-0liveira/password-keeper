@@ -1,3 +1,6 @@
+import { SteamAppActionType } from "@src/enums"
+
+
 declare global {
 	type SA_A_INITIAL_LOAD = {
 		type: SteamAppActionType.INITIAL_LOAD,

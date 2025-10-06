@@ -1,3 +1,5 @@
+import { PasswordsAppActionType } from "@src/enums"
+
 declare global {
 
 	type RowsContextT = {
