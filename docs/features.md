@@ -61,11 +61,15 @@
 - [ ] Bottom-bar close on cancel may be a toggle
 - [ ] Button to activate or deactivate the notes feature
 - [ ] Checkbox for autofocus when opening filter tab
+- [ ] WindowsTerminalGenerator:
+	- [ ] default workingDir
 
 ### important:
 - [ ] Add on/off switches for tabs on the sidebar
-- [ ] WindowsTerminalGenerator:
-	- [ ] default workingDir
+- [ ] Secrets tab
+- [ ] Project launcher tab (should have cards with dev and prod mode one-click launch and maybe it runs windowsTerminalGenerated scripts ??? yeaaa)
+- [ ] Add dynamic types to help with defining State update calls Types
+- [ ] cleanup scss warnings
 
 ## Future (further away features to add)
 

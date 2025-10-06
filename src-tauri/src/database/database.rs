@@ -3,6 +3,8 @@ use rusqlite::{params, Connection, Error, ToSql};
 use serde::Serialize;
 use std::sync::{Mutex, MutexGuard, OnceLock};
 
+use crate::database::secrets::Secret;
+
 use super::password_vault::PasswordVaultUser;
 use super::steam_api_keys::SteamApiKey;
 use super::steam_users::SteamUser;
@@ -18,6 +20,7 @@ lazy_static! {
                     PasswordVaultUser::ensure_table_exists(&conn);
                     SteamUser::ensure_table_exists(&conn);
                     SteamApiKey::ensure_table_exists(&conn);
+					Secret::ensure_table_exists(&conn);
                     conn
                 },
                 Err(err) => {

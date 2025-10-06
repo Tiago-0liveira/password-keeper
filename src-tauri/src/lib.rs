@@ -16,6 +16,9 @@ use handlers::{
         steam_users_delete, steam_users_get_all_rows, steam_users_get_one,
         steam_users_validate_and_insert,
     },
+	secrets::{
+		secrets_get_all_rows, secrets_delete, secrets_update, secrets_validate_and_insert
+	}
 };
 use tauri::Manager;
 
@@ -80,7 +83,12 @@ pub fn run() {
             steam_api_keys_get_all,
             steam_api_keys_get_one,
             steam_api_keys_delete,
-            steam_api_keys_validate_and_insert
+            steam_api_keys_validate_and_insert,
+			/* secrets handlers */
+			secrets_get_all_rows,
+			secrets_delete,
+			secrets_update,
+			secrets_validate_and_insert
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

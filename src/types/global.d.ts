@@ -27,17 +27,7 @@ declare global {
 		sidebarBottom?: boolean
 		icon?: JSX.Element
 	}
-
-
 	
-
-
-
-
-	
-
-
-
 }
 
 /*export type TgetRow = (uuid: string, resolve: (value: Row | PromiseLike<Row>) => void, reject: (reason?: any) => void) => void*/
