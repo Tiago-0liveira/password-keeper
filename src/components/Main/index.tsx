@@ -1,11 +1,29 @@
 import React, { useEffect, useState } from "react"
-import {config as PasswordApp} from "../Apps/Passwords/index"
+import { config as PasswordApp } from "../Apps/Passwords/index"
 import Apps from "../Apps"
 import "./styles.scss"
 import clsx from "clsx"
 import Mousetrap from "mousetrap"
 import icons from "../Icons"
 import { getCurrentWindow } from '@tauri-apps/api/window';
+
+
+type SidebarItemComponentProps = {
+	app: App
+	activeApp: App
+	setApp: (index: number) => () => void
+	i: number
+}
+const SidebarItemComponent: React.FC<SidebarItemComponentProps> = ({ app, activeApp, setApp, i }) => {
+	return (
+		<div className={clsx("app", app.label === activeApp.label ? "active" : "", app.sidebarBottom && "sidebarBottom")} onClick={setApp(i)}>
+			<p>
+				{app.icon}<span className="label">{app.label}</span>
+			</p>
+			{icons.main.sidebarArrow}
+		</div>
+	)
+}
 
 const Main: React.FC = () => {
 	const [activeApp, setActiveApp] = useState<App>(PasswordApp)
@@ -72,17 +90,15 @@ const Main: React.FC = () => {
 			</div>
 			<div className="content">
 				<div className={clsx("sidebar", !isSbopen && "closed")}>
-					{Apps.map((app, i) => (
-						<div className={clsx("app", app.label === activeApp.label ? "active" : "", app.sidebarBottom && "sidebarBottom")} key={i} onClick={setApp(i)}>
-							<p>
-								{app.icon}<span className="label">{app.label}</span>
-							</p>
-							{icons.main.sidebarArrow}
-						</div>
-					))}
+					<div className="top">
+						{Apps.map((app, i) => !app.sidebarBottom && <SidebarItemComponent app={app} activeApp={activeApp} key={i} i={i} setApp={setApp} />)}
+					</div>
+					<div className="bottom">
+						{Apps.map((app, i) => app.sidebarBottom && <SidebarItemComponent app={app} activeApp={activeApp} key={i} i={i} setApp={setApp} />)}
+					</div>
 				</div>
 				{Apps.map(app => {
-					return (<div className={clsx("app-display", !isSbopen && "SbClosed", {active: activeApp.label === app.label})} key={app.label}>						
+					return (<div className={clsx("app-display", !isSbopen && "SbClosed", { active: activeApp.label === app.label })} key={app.label}>
 						<app.component setExtraLabel={setExtraLabel} />
 					</div>)
 				})}
