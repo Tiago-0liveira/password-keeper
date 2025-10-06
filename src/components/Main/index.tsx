@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { config as PasswordApp } from "../Apps/Passwords/index"
 import Apps from "../Apps"
 import "./styles.scss"
@@ -10,20 +10,20 @@ import { getCurrentWindow } from '@tauri-apps/api/window';
 
 type SidebarItemComponentProps = {
 	app: App
-	activeApp: App
+	active: boolean
 	setApp: (index: number) => () => void
 	i: number
 }
-const SidebarItemComponent: React.FC<SidebarItemComponentProps> = ({ app, activeApp, setApp, i }) => {
+const SidebarItemComponent: React.FC<SidebarItemComponentProps> = React.memo(({ app, active, setApp, i }) => {
 	return (
-		<div className={clsx("app", app.label === activeApp.label ? "active" : "", app.sidebarBottom && "sidebarBottom")} onClick={setApp(i)}>
+		<div className={clsx("app", active ? "active" : "", app.sidebarBottom && "sidebarBottom")} onClick={setApp(i)}>
 			<p>
 				{app.icon}<span className="label">{app.label}</span>
 			</p>
 			{icons.main.sidebarArrow}
 		</div>
 	)
-}
+})
 
 const Main: React.FC = () => {
 	const [activeApp, setActiveApp] = useState<App>(PasswordApp)
@@ -31,9 +31,13 @@ const Main: React.FC = () => {
 	const [extraLabel, setExtraLabel] = useState("")
 
 	const toggleSideBar = () => { setisSbopen(value => !value) }
-	const setApp = (index: number) => () => {
-		setActiveApp(Apps[index])
-	}
+	const setApp = useCallback(
+		(index: number) => () => {
+			setActiveApp(Apps[index])
+		},
+		[],
+	)
+
 	const minimize = () => {
 		getCurrentWindow().minimize();
 	}
@@ -91,10 +95,10 @@ const Main: React.FC = () => {
 			<div className="content">
 				<div className={clsx("sidebar", !isSbopen && "closed")}>
 					<div className="top">
-						{Apps.map((app, i) => !app.sidebarBottom && <SidebarItemComponent app={app} activeApp={activeApp} key={i} i={i} setApp={setApp} />)}
+						{Apps.map((app, i) => !app.sidebarBottom && <SidebarItemComponent app={app} active={app.label === activeApp.label} key={i} i={i} setApp={setApp} />)}
 					</div>
 					<div className="bottom">
-						{Apps.map((app, i) => app.sidebarBottom && <SidebarItemComponent app={app} activeApp={activeApp} key={i} i={i} setApp={setApp} />)}
+						{Apps.map((app, i) => app.sidebarBottom && <SidebarItemComponent app={app} active={app.label === activeApp.label} key={i} i={i} setApp={setApp} />)}
 					</div>
 				</div>
 				{Apps.map(app => {
