@@ -47,13 +47,13 @@ impl DatabaseModel<Error> for Secret {
         conn.execute(&sql_query, []).unwrap();
     }
     fn __get_save_params(&self) -> Pair<String, Box<[&dyn rusqlite::ToSql]>> {
-        let sql_query = format!("INSERT INTO {} (name) VALUES (?)", Self::TABLE_NAME);
-        let params: Box<[&dyn rusqlite::ToSql]> = Box::new([&self.name]);
+        let sql_query = format!("INSERT INTO {} (name, secret) VALUES (?, ?)", Self::TABLE_NAME);
+        let params: Box<[&dyn rusqlite::ToSql]> = Box::new([&self.name, &self.secret]);
         Pair(sql_query, params)
     }
     fn __get_update_params(&self) -> Pair<String, Box<[&dyn rusqlite::ToSql]>> {
-        let sql_query = format!("UPDATE {} SET name = ? WHERE uuid = ?", Self::TABLE_NAME);
-        let params: Box<[&dyn rusqlite::ToSql]> = Box::new([&self.name, &self.uuid]);
+        let sql_query = format!("UPDATE {} SET name = ? ,secret = ? WHERE uuid = ?", Self::TABLE_NAME);
+        let params: Box<[&dyn rusqlite::ToSql]> = Box::new([&self.name, &self.secret, &self.uuid]);
         Pair(sql_query, params)
     }
     fn validate(&self) -> Result<(), Error> {
