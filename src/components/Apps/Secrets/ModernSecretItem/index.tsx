@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCopy, faEdit, faTrash, faEye, faEyeSlash, faSave, faTimes, faKey, faShieldAlt } from "@fortawesome/free-solid-svg-icons"
+import { faCopy, faEdit, faTrash, faEye, faEyeSlash, faSave, faTimes, faKey } from "@fortawesome/free-solid-svg-icons"
 import "./index.scss"
 
 interface ModernSecretItemProps extends Secret {
