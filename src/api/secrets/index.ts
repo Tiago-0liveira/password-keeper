@@ -4,11 +4,8 @@ export const getSecrets = (): Promise<Secret[]> => {
 	return invoke<Secret[]>("secrets_get_all_rows")
 }
 
-export const insertOne = (name: string, secret: string): Promise<Secret> => {
-	return invoke<Secret>("secrets_validate_and_insert", {
-		uuid: -1,
-		name, secret
-	})
+export const insertOne = (secret: Secret): Promise<Secret> => {
+	return invoke<Secret>("secrets_validate_and_insert", { secret })
 }
 
 export const deleteSecret = (uuid: Number): Promise<void> => {
@@ -16,5 +13,5 @@ export const deleteSecret = (uuid: Number): Promise<void> => {
 }
 
 export const updateSecret = (secret: Secret): Promise<void> => {
-	return invoke<void>("secrets_update", { ...secret })
+	return invoke<void>("secrets_update", { secret })
 }
